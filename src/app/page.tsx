@@ -172,64 +172,46 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ── Hero ── */}
-      <section className="mx-auto max-w-6xl px-5 pb-16 pt-10 md:px-8 md:pb-20 md:pt-14">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-          <div>
-            <p className="hero-in inline-flex items-center gap-2 rounded-full border border-line bg-white/60 px-4 py-1.5 text-[13px] font-semibold tracking-wide text-leaf">
-              <span className="h-2 w-2 rounded-full bg-terra" />
+      {/* ── Hero: full-bleed photo, no border, no frame.
+           Text sits on the image itself, bottom-centre, under a
+           light shadow layer for readability. */}
+      <section className="relative">
+        <div className="relative h-[86svh] min-h-[560px] w-full md:h-[92vh]">
+          <Image
+            src="/baaric-hero-product.jpg"
+            alt="Baaric বেবি অয়েল — ম্যাসাজ অয়েল, কোকোনাট অয়েল ও হেয়ার অয়েল"
+            fill
+            priority
+            className="object-cover object-center"
+          />
+          <div
+            className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-black/10"
+            aria-hidden
+          />
+          <div className="absolute inset-x-0 bottom-0 px-5 pb-12 text-center text-white drop-shadow-[0_2px_10px_rgb(0_0_0/0.45)] md:pb-16">
+            <p className="hero-in text-[13px] font-bold uppercase tracking-[0.22em] text-white/85">
               {hero.eyebrow}
             </p>
-            <h1 className="hero-in-delay mt-5 font-display text-[38px] font-bold leading-[1.25] text-cocoa sm:text-[48px] lg:text-[54px]">
+            <h1 className="hero-in-delay mx-auto mt-3 max-w-3xl font-display text-[40px] font-bold leading-[1.2] sm:text-[54px] md:text-[64px]">
               {hero.titleA}{" "}
-              <em className="not-italic text-terra-deep">{hero.highlight}</em>
+              <em className="not-italic text-rose-soft">{hero.highlight}</em>
             </h1>
-            <p className="hero-in-delay2 mt-5 max-w-lg text-[17px] leading-relaxed text-cocoa-soft">
+            <p className="hero-in-delay2 mx-auto mt-4 max-w-xl text-[16px] leading-relaxed text-white/90 md:text-[18px]">
               {hero.subtext}
             </p>
-            <div className="hero-in-delay2 mt-7 flex flex-wrap items-center gap-3">
+            <div className="hero-in-delay2 mt-7 flex flex-wrap items-center justify-center gap-3">
               <a
                 href="#order"
-                className={`${fade} rounded-full bg-leaf px-7 py-3.5 text-[16px] font-semibold text-cream hover:-translate-y-0.5 hover:bg-leaf-deep hover:shadow-[0_14px_24px_-10px_rgb(47_74_34/0.7)] active:scale-95`}
+                className={`${fade} rounded-full bg-terra px-7 py-3.5 text-[16px] font-semibold text-white hover:-translate-y-0.5 hover:bg-terra-deep hover:shadow-[0_14px_24px_-10px_rgb(0_0_0/0.5)] active:scale-95`}
               >
                 {hero.primaryCta}
               </a>
               <a
                 href="#variants"
-                className={`${fade} rounded-full border border-cocoa/25 bg-white/50 px-7 py-3.5 text-[16px] font-semibold text-cocoa hover:-translate-y-0.5 hover:border-terra hover:text-terra-deep active:scale-95`}
+                className={`${fade} rounded-full border border-white/70 bg-white/10 px-7 py-3.5 text-[16px] font-semibold text-white backdrop-blur-sm hover:-translate-y-0.5 hover:bg-white/20 active:scale-95`}
               >
                 {hero.secondaryCta}
               </a>
-            </div>
-            <p className="hero-in-delay2 mt-7 flex flex-wrap items-center gap-x-3 gap-y-1 text-[14px] font-medium text-cocoa-faint">
-              {hero.trust.map((t, i) => (
-                <span key={t} className="flex items-center gap-3">
-                  {i > 0 && <span className="text-rose">✦</span>}
-                  {t}
-                </span>
-              ))}
-            </p>
-          </div>
-
-          <div className="hero-in-delay relative mx-auto w-full max-w-[480px]">
-            <div className="absolute -right-6 -top-6 h-40 w-40 rounded-full bg-leaf-soft" aria-hidden />
-            <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-rose-soft" aria-hidden />
-            <div className="relative overflow-hidden rounded-b-[2rem] rounded-t-[999px] border-[6px] border-white shadow-[0_30px_60px_-30px_rgb(59_36_22/0.45)]">
-              <Image
-                src="/baaric-hero-product.jpg"
-                alt="Baaric বেবি অয়েল — ম্যাসাজ অয়েল, কোকোনাট অয়েল ও হেয়ার অয়েল"
-                width={1080}
-                height={1080}
-                priority
-                className="aspect-square w-full object-cover"
-              />
-            </div>
-            <div className="animate-float absolute -left-3 top-[30%] rounded-2xl bg-white/95 px-4 py-3 shadow-[0_16px_30px_-14px_rgb(59_36_22/0.4)] sm:-left-8">
-              <p className="font-display text-[20px] font-bold leading-none text-leaf">৩টি তেল</p>
-              <p className="mt-1 text-[12px] font-medium text-cocoa-soft">ম্যাসাজ · চুল · ত্বক</p>
-            </div>
-            <div className="animate-float-slow absolute -right-2 bottom-[12%] rounded-full bg-terra px-4 py-2.5 text-[14px] font-semibold text-white shadow-[0_16px_30px_-14px_rgb(180_74_42/0.6)] sm:-right-5">
-              ৫০ – ২০০ মিলি
             </div>
           </div>
         </div>
@@ -250,7 +232,7 @@ export default function Home() {
       <section id="intro" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 md:px-8">
         <div className="reveal grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <div className="relative">
-            <div className="overflow-hidden rounded-[2rem] shadow-[0_30px_60px_-30px_rgb(59_36_22/0.45)]">
+            <div className="overflow-hidden rounded-[1.5rem] shadow-[0_30px_60px_-30px_rgb(59_36_22/0.45)]">
               <Image
                 src="/baaric-lifestyle.jpg"
                 alt="শিশুর ম্যাসাজের মুহূর্ত — বেবি হেয়ার অয়েল ও বেবি ম্যাসাজ অয়েল"
@@ -297,7 +279,7 @@ export default function Home() {
 
           <div className="reveal mt-12 grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
             <div>
-              <div className="overflow-hidden rounded-b-[2rem] rounded-t-[10rem] border-[6px] border-white bg-sand shadow-[0_30px_60px_-30px_rgb(59_36_22/0.4)]">
+              <div className="overflow-hidden rounded-[1.5rem] border border-line bg-white shadow-[0_30px_60px_-30px_rgb(59_36_22/0.35)]">
                 <Image
                   key={selected.id}
                   src={selected.image}
@@ -441,7 +423,7 @@ export default function Home() {
             {[...reviews.items, ...reviews.items].map((r, i) => (
               <article
                 key={i}
-                className="w-[86%] shrink-0 rounded-[1.75rem] border border-line bg-white p-6 shadow-[0_18px_36px_-24px_rgb(59_36_22/0.35)] sm:w-[47%] lg:w-[31.5%]"
+                className="w-[86%] shrink-0 rounded-[1.5rem] border border-line bg-white p-6 shadow-[0_18px_36px_-24px_rgb(59_36_22/0.35)] sm:w-[47%] lg:w-[31.5%]"
               >
                 <p className="text-[17px] tracking-[0.2em] text-gold">★★★★★</p>
                 <p className="mt-3 text-[16px] leading-relaxed text-cocoa-soft">“{r.quote}”</p>
@@ -489,7 +471,7 @@ export default function Home() {
 
       {/* ── Order ── */}
       <section id="order" className="mx-auto max-w-6xl scroll-mt-24 px-5 pb-20 md:px-8">
-        <div className="reveal overflow-hidden rounded-[2rem] bg-cream-deep/60">
+        <div className="reveal overflow-hidden rounded-[1.5rem] bg-cream-deep/60">
           <div className="grid lg:grid-cols-[1fr_1.1fr]">
             <div className="bg-leaf px-7 py-10 text-cream sm:px-10">
               <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-rose">{order.eyebrow}</p>

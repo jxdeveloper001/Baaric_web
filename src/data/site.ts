@@ -6,10 +6,17 @@
 // • NO price, delivery charge, COD or delivery-time claim anywhere
 //   on the site — none was supplied. The order form collects an
 //   order request; price + delivery are confirmed on the call.
-// • Product photos are CROPS of the two original images the user
-//   supplied — the bottles' real labels are unchanged. The bottles
-//   in the photos carry the "maate" label as supplied; the website
-//   brand is Baaric. A footnote on the variants section says so.
+// • Photos (Nov 25, 2nd round): hero + massage-50 / hair-150 /
+//   coconut-200 singles are AI-generated brand-style images made
+//   from the original photos — hero has no banner text; singles are
+//   on clean white. HONEST: the massage-50 single's small label text
+//   is MIXED — top says "Baby Massage Oil" but below it reads
+//   "Gurhal and Bhringraj / Hair Growth & Scalp Conditioning"
+//   (hair oil's words). The real 50 ml massage oil is Pomegranate
+//   and Noni. Massage-150 is still a REAL crop of the original
+//   photo (baby in a hat behind the bottle). The bottles' real
+//   labels are unchanged in the real crops; the website brand is
+//   Baaric. A footnote on the variants section says so.
 // • Sizes are read off the bottle labels:
 //   Massage Oil 50 ml + 150 ml, Hair Oil 150 ml, Coconut Oil 200 ml.
 // • Reviews below are SAMPLE quotes — replace with real ones.
@@ -28,11 +35,11 @@ export const site = {
 } as const;
 
 export const hero = {
-  eyebrow: "প্রাকৃতিক বেবি অয়েল · তিনটি যত্নের তেল",
-  titleA: "শিশুর কোমল ত্বক ও চুলের জন্য",
-  highlight: "প্রাকৃতিক যত্ন",
+  eyebrow: "প্রাকৃতিক বেবি অয়েল",
+  titleA: "শিশুর কোমল যত্ন,",
+  highlight: "প্রাকৃতিকভাবে",
   subtext:
-    "ম্যাসাজ অয়েল, হেয়ার অয়েল আর কোল্ড-প্রেসড কোকোনাট অয়েল — মায়ের হাতের যত্নের মতোই কোমল, প্রতিদিনের ছোট ছোট মুহূর্তের জন্য।",
+    "ম্যাসাজ, হেয়ার আর কোকোনাট অয়েল — প্রতিদিনের কোমল যত্নে।",
   primaryCta: "অর্ডার করুন",
   secondaryCta: "পণ্য দেখুন",
   trust: ["আসল প্যাকেজিং", "লেবেলে লেখা উপাদান", "কোমল, প্রতিদিনের ব্যবহার"],
@@ -168,7 +175,7 @@ export const faqs = [
   },
   {
     q: "ছবির বোতলে অন্য নাম লেখা কেন?",
-    a: "ছবিগুলো আসল পণ্যের ছবি — বোতলের আসল প্যাকেজিং আর লেবেল অপরিবর্তিত রাখা হয়েছে, তাই লেবেলে সরবরাহকারীর নাম দেখা যায়। ওয়েবসাইটের ব্র্যান্ড Baaric।",
+    a: "বোতলগুলো আসল পণ্যের — ম্যাসাজ অয়েল ১৫০ মিলির ছবিটি আসল ফটোরই অংশ, আর বাকি ছবিগুলো আসল পণ্য দেখে বানানো ব্র্যান্ড-স্টাইল ছবি। লেবেলে সরবরাহকারীর নাম দেখা যায়, ওয়েবসাইটের ব্র্যান্ড Baaric।",
   },
 ] as const;
 
