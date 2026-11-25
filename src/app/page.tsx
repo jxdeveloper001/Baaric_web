@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { faqs, hero, intro, marquee, order, reviews, site, variants } from "@/data/site";
 
 const fade = "transition-all duration-300 ease-out";
@@ -21,6 +21,67 @@ export default function Home() {
   const [orderId, setOrderId] = useState("");
 
   const selected = variants.find((v) => v.id === variantId) ?? variants[0];
+
+  // ── Reviews slider: one row, auto-advances, infinite.
+  //    The list is rendered twice; the position snaps back to 0
+  //    without animation after the duplicated first card.
+  const reviewCount = reviews.items.length;
+  const [revPos, setRevPos] = useState(0);
+  const [revSnap, setRevSnap] = useState(false);
+  const [revPaused, setRevPaused] = useState(false);
+  const [revStep, setRevStep] = useState(0);
+  const revTrackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const measure = () => {
+      const track = revTrackRef.current;
+      if (track && track.children.length > 1) {
+        const first = track.children[0] as HTMLElement;
+        const second = track.children[1] as HTMLElement;
+        setRevStep(second.offsetLeft - first.offsetLeft);
+      }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  useEffect(() => {
+    if (revPos >= reviewCount) {
+      const t = setTimeout(() => {
+        setRevSnap(true);
+        setRevPos(0);
+      }, 700);
+      return () => clearTimeout(t);
+    }
+  }, [revPos, reviewCount]);
+
+  useEffect(() => {
+    if (revPaused) return;
+    const t = setInterval(() => {
+      setRevSnap(false);
+      setRevPos((p) => p + 1);
+    }, 3000);
+    return () => clearInterval(t);
+  }, [revPaused]);
+
+  const revNext = () => {
+    setRevSnap(false);
+    setRevPos((p) => p + 1);
+  };
+  const revPrev = () => {
+    if (revPos === 0) {
+      setRevSnap(true);
+      setRevPos(reviewCount);
+      setTimeout(() => {
+        setRevSnap(false);
+        setRevPos(reviewCount - 1);
+      }, 40);
+    } else {
+      setRevSnap(false);
+      setRevPos((p) => p - 1);
+    }
+  };
 
   // Scroll reveal — inline style only, never classList (React rewrites
   // className on re-render and would wipe an added class, fading the
@@ -113,9 +174,9 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ── Hero: SPLIT layout on the user's wood print.
-           Wood texture underneath + a soft cream wash so the text
-           stays readable; blurred green + pink washes float behind. */}
+      {/* ── Hero: CENTERED. The product image sits in the middle,
+           the text sits ON the image (top, over a soft cream wash),
+           the buttons sit BELOW the image. Minimal text. */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <Image
@@ -129,45 +190,7 @@ export default function Home() {
         </div>
         <div aria-hidden className="pointer-events-none absolute -left-24 top-8 h-72 w-72 bg-blur-green/45 blur-3xl" />
         <div aria-hidden className="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 bg-blur-pink/50 blur-3xl" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 md:grid-cols-2 md:px-8 md:py-20">
-          <div>
-            <p className="hero-in text-[13px] font-bold uppercase tracking-[0.22em] text-terra-deep">
-              {hero.eyebrow}
-            </p>
-            <h1 className="hero-in-delay mt-3 font-display text-[40px] font-bold leading-[1.15] text-cocoa sm:text-[52px] md:text-[58px]">
-              {hero.titleA}{" "}
-              <em className="not-italic text-leaf">{hero.highlight}</em>
-            </h1>
-            <p className="hero-in-delay2 mt-4 max-w-lg text-[16px] leading-relaxed text-cocoa-soft md:text-[18px]">
-              {hero.subtext}
-            </p>
-            <div className="hero-in-delay2 mt-7 flex flex-wrap items-center gap-3">
-              <a
-                href="#order"
-                className={`${fade} rounded-md bg-gold px-8 py-3.5 text-[16px] font-bold text-cocoa shadow-[0_14px_26px_-12px_rgb(185_127_31/0.8)] hover:-translate-y-0.5 hover:bg-terra-deep hover:text-white active:scale-95`}
-              >
-                {hero.primaryCta}
-              </a>
-              <a
-                href="#variants"
-                className={`${fade} rounded-md border-2 border-leaf/30 bg-white/70 px-7 py-3 text-[16px] font-bold text-leaf hover:-translate-y-0.5 hover:border-leaf active:scale-95`}
-              >
-                পণ্য দেখুন
-              </a>
-            </div>
-            <div className="hero-in-delay2 mt-8 flex flex-wrap gap-2.5">
-              {["আসল প্যাকেজিং", "লেবেলে লেখা উপাদান", "কোমল, প্রতিদিনের"].map((t, i) => (
-                <span
-                  key={t}
-                  className={`rounded-md px-3.5 py-2 text-[13.5px] font-bold text-cocoa ${
-                    ["bg-leaf-soft text-leaf", "bg-rose-soft text-rosedeep", "bg-goldsoft text-terra-deep"][i]
-                  }`}
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
+        <div className="relative mx-auto max-w-4xl px-5 py-12 md:px-8 md:py-16">
           <div className="relative">
             <div aria-hidden className="absolute -left-3 -top-3 h-full w-full rounded-lg bg-gold/50" />
             <div aria-hidden className="absolute -bottom-3 -right-3 h-full w-full rounded-lg bg-rose/40" />
@@ -180,7 +203,33 @@ export default function Home() {
                 priority
                 className="h-auto w-full"
               />
+              <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-cream/90 via-cream/55 to-transparent px-5 pb-20 pt-6 text-center sm:pt-8">
+                <p className="hero-in text-[12px] font-bold uppercase tracking-[0.22em] text-terra-deep sm:text-[13px]">
+                  {hero.eyebrow}
+                </p>
+                <h1 className="hero-in-delay mx-auto mt-2 max-w-2xl font-display text-[26px] font-bold leading-[1.2] text-cocoa sm:text-[40px] md:text-[46px]">
+                  {hero.titleA}{" "}
+                  <em className="not-italic text-leaf">{hero.highlight}</em>
+                </h1>
+                <p className="hero-in-delay2 mx-auto mt-2 hidden max-w-xl text-[16px] leading-relaxed text-cocoa-soft sm:block">
+                  {hero.subtext}
+                </p>
+              </div>
             </div>
+          </div>
+          <div className="hero-in-delay2 mt-7 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="#order"
+              className={`${fade} rounded-md bg-gold px-8 py-3.5 text-[16px] font-bold text-cocoa shadow-[0_14px_26px_-12px_rgb(185_127_31/0.8)] hover:-translate-y-0.5 hover:bg-terra-deep hover:text-white active:scale-95`}
+            >
+              {hero.primaryCta}
+            </a>
+            <a
+              href="#variants"
+              className={`${fade} rounded-md border-2 border-leaf/30 bg-white/70 px-7 py-3 text-[16px] font-bold text-leaf hover:-translate-y-0.5 hover:border-leaf active:scale-95`}
+            >
+              {hero.secondaryCta}
+            </a>
           </div>
         </div>
       </section>
@@ -350,54 +399,76 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Reviews: a plain grid now (no slider), one tint per card. ── */}
+      {/* ── Reviews: ONE row, auto-sliding (as before), square corners. ── */}
       <section id="reviews" className="scroll-mt-24 bg-peach py-20">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <div className="reveal max-w-2xl">
-            <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">{reviews.eyebrow}</p>
-            <h2 className="mt-3 font-display text-[30px] font-bold text-cocoa sm:text-[38px]">{reviews.heading}</h2>
-            {reviews.sample && (
-              <p className="mt-3 inline-flex items-center gap-2 rounded-md bg-white px-3 py-1.5 text-[12px] font-bold text-terra-deep">
-                নমুনা রিভিউ — আসল ক্রেতার কথা এলে এখানে বসবে
-              </p>
-            )}
-            <div className="mt-4 h-1 w-16 bg-gold" />
-          </div>
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {reviews.items.map((r, i) => (
-              <article
-                key={r.name}
-                className={`reveal rounded-lg p-6 shadow-[0_18px_36px_-26px_rgb(74_46_27/0.4)] ${
-                  ["bg-white", "bg-leaf-soft", "bg-goldsoft", "bg-white"][i % 4]
-                }`}
+          <div className="reveal flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">{reviews.eyebrow}</p>
+              <h2 className="mt-3 font-display text-[30px] font-bold text-cocoa sm:text-[38px]">{reviews.heading}</h2>
+              {reviews.sample && (
+                <p className="mt-3 inline-flex items-center gap-2 rounded-md bg-white px-3 py-1.5 text-[12px] font-bold text-terra-deep">
+                  নমুনা রিভিউ — আসল ক্রেতার কথা এলে এখানে বসবে
+                </p>
+              )}
+              <div className="mt-4 h-1 w-16 bg-gold" />
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={revPrev}
+                aria-label="আগের রিভিউ"
+                className="flex h-11 w-11 items-center justify-center rounded-md border border-line bg-white text-[18px] text-cocoa transition hover:border-gold hover:text-terra-deep"
               >
-                <p className="text-[17px] tracking-[0.2em] text-gold">★★★★★</p>
-                <p className="mt-3 text-[16px] leading-relaxed text-cocoa-soft">“{r.quote}”</p>
-                <p className="mt-5 font-display text-[16px] font-bold text-cocoa">{r.name}</p>
-                <p className="text-[13px] text-cocoa-faint">{r.role}</p>
-              </article>
-            ))}
+                ‹
+              </button>
+              <button
+                type="button"
+                onClick={revNext}
+                aria-label="পরের রিভিউ"
+                className="flex h-11 w-11 items-center justify-center rounded-md border border-line bg-white text-[18px] text-cocoa transition hover:border-gold hover:text-terra-deep"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+
+          <div
+            className="reveal mt-10 overflow-hidden"
+            onMouseEnter={() => setRevPaused(true)}
+            onMouseLeave={() => setRevPaused(false)}
+          >
+            <div
+              ref={revTrackRef}
+              className="flex gap-5"
+              style={{
+                transform: `translateX(-${revPos * revStep}px)`,
+                transition: revSnap ? "none" : "transform 0.7s cubic-bezier(0.22,1,0.36,1)",
+              }}
+            >
+              {[...reviews.items, ...reviews.items].map((r, i) => (
+                <article
+                  key={i}
+                  className="w-[86%] shrink-0 rounded-lg border border-line bg-white p-6 shadow-[0_18px_36px_-26px_rgb(74_46_27/0.4)] sm:w-[47%] lg:w-[31.5%]"
+                >
+                  <p className="text-[17px] tracking-[0.2em] text-gold">★★★★★</p>
+                  <p className="mt-3 text-[16px] leading-relaxed text-cocoa-soft">“{r.quote}”</p>
+                  <p className="mt-5 font-display text-[16px] font-bold text-cocoa">{r.name}</p>
+                  <p className="text-[13px] text-cocoa-faint">{r.role}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── FAQ: two columns — heading on the left, accordion on the right. ── */}
+      {/* ── FAQ: plain and centered — just the questions. ── */}
       <section id="faq" className="scroll-mt-24 bg-white py-20">
-        <div className="mx-auto grid max-w-6xl gap-10 px-5 md:grid-cols-[1fr_1.6fr] md:px-8">
-          <div className="reveal">
-            <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">জিজ্ঞাসা</p>
-            <h2 className="mt-3 font-display text-[30px] font-bold text-cocoa sm:text-[38px]">সচরাচর জিজ্ঞাসা</h2>
-            <p className="mt-3 max-w-sm text-[16px] leading-relaxed text-cocoa-soft">
-              যা জানতে চান, সংক্ষেপে — কোনো বাড়তি কথা নয়।
-            </p>
-            <div className="mt-6 max-w-sm rounded-lg bg-rose-soft p-5">
-              <p className="font-display text-[17px] font-bold text-cocoa">আরও জানতে চান?</p>
-              <p className="mt-1 text-[14px] leading-relaxed text-cocoa-soft">
-                অর্ডারের সময় ফোনে সব প্রশ্নের উত্তর দেওয়া হবে — দাম ও ডেলিভারিসহ।
-              </p>
-            </div>
+        <div className="mx-auto max-w-3xl px-5 md:px-8">
+          <div className="reveal text-center">
+            <h2 className="font-display text-[30px] font-bold text-cocoa sm:text-[38px]">সচরাচর জিজ্ঞাসা</h2>
           </div>
-          <div className="reveal">
+          <div className="reveal mt-8">
             {faqs.map((f, i) => {
               const open = openFaq === i;
               return (
@@ -427,48 +498,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Order: SPLIT card. Left: wood panel with product + summary.
-           Right: the form. ── */}
+      {/* ── Order: SPLIT card — form on the left, wood panel with
+           product + summary (+ qty stepper) on the right. ── */}
       <section id="order" className="scroll-mt-24 bg-sage py-20">
-        <div className="mx-auto max-w-5xl px-5 md:px-8">
-          <div className="reveal grid overflow-hidden rounded-lg bg-white shadow-[0_30px_60px_-30px_rgb(74_46_27/0.4)] md:grid-cols-[1fr_1.2fr]">
-            <div className="relative flex flex-col justify-center overflow-hidden px-7 py-10 sm:px-9">
-              <div className="absolute inset-0">
-                <Image src="/baaric-wood.jpg" alt="" fill className="object-cover opacity-40" />
-                <div className="absolute inset-0 bg-cream/78" />
-              </div>
-              <div className="relative">
-                <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">{order.eyebrow}</p>
-                <h2 className="mt-2 font-display text-[28px] font-bold leading-snug text-cocoa sm:text-[32px]">
-                  {order.heading}
-                </h2>
-                <p className="mt-2 text-[15px] leading-relaxed text-cocoa-soft">{order.subtext}</p>
-                <div className="mt-7 flex items-center gap-4 rounded-lg bg-white/85 p-4 shadow-[0_16px_30px_-20px_rgb(74_46_27/0.5)]">
-                  <div className="h-24 w-20 shrink-0 overflow-hidden rounded-md bg-white">
-                    <Image
-                      key={selected.id}
-                      src={selected.image}
-                      alt={selected.alt}
-                      width={160}
-                      height={200}
-                      className="anim-swap h-full w-full object-contain"
-                    />
-                  </div>
-                  <div>
-                    <p className="font-display text-[18px] font-bold leading-snug text-cocoa">{selected.name}</p>
-                    <p className="mt-1 text-[14px] text-cocoa-soft">
-                      {selected.variant} · {selected.sizeBn} ({selected.sizeMl})
-                    </p>
-                    <p className="mt-1 text-[14px] font-semibold text-leaf">
-                      পরিমাণ: {qty.toLocaleString("bn-BD")} টি
-                    </p>
-                  </div>
-                </div>
-                <p className="mt-4 rounded-lg bg-rose-soft/60 px-4 py-3 text-[13.5px] leading-relaxed text-cocoa-soft">
-                  {order.note}
-                </p>
-              </div>
-            </div>
+        <div className="mx-auto max-w-6xl px-5 md:px-8">
+          <div className="reveal grid overflow-hidden rounded-lg bg-white shadow-[0_30px_60px_-30px_rgb(74_46_27/0.4)] md:grid-cols-[1.2fr_1fr]">
             <div className="px-7 py-9 sm:px-9">
               {done ? (
                 <div className="flex h-full flex-col items-start justify-center py-4 text-left">
@@ -552,6 +586,62 @@ export default function Home() {
                   </button>
                 </form>
               )}
+            </div>
+            <div className="relative flex flex-col justify-center overflow-hidden px-7 py-10 sm:px-9">
+              <div className="absolute inset-0">
+                <Image src="/baaric-wood.jpg" alt="" fill className="object-cover opacity-40" />
+                <div className="absolute inset-0 bg-cream/78" />
+              </div>
+              <div className="relative">
+                <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">{order.eyebrow}</p>
+                <h2 className="mt-2 font-display text-[28px] font-bold leading-snug text-cocoa sm:text-[32px]">
+                  {order.heading}
+                </h2>
+                <p className="mt-2 text-[15px] leading-relaxed text-cocoa-soft">{order.subtext}</p>
+                <div className="mt-7 flex items-center gap-4 rounded-lg bg-white/85 p-4 shadow-[0_16px_30px_-20px_rgb(74_46_27/0.5)]">
+                  <div className="h-24 w-20 shrink-0 overflow-hidden rounded-md bg-white">
+                    <Image
+                      key={selected.id}
+                      src={selected.image}
+                      alt={selected.alt}
+                      width={160}
+                      height={200}
+                      className="anim-swap h-full w-full object-contain"
+                    />
+                  </div>
+                  <div>
+                    <p className="font-display text-[18px] font-bold leading-snug text-cocoa">{selected.name}</p>
+                    <p className="mt-1 text-[14px] text-cocoa-soft">
+                      {selected.variant} · {selected.sizeBn} ({selected.sizeMl})
+                    </p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <span className="text-[13px] font-semibold text-cocoa-soft">পরিমাণ</span>
+                      <button
+                        type="button"
+                        onClick={() => setQty((q) => Math.max(1, q - 1))}
+                        aria-label="পরিমাণ কমান"
+                        className="flex h-8 w-8 items-center justify-center rounded-md border border-line bg-white text-[16px] text-cocoa transition hover:border-gold hover:text-terra-deep"
+                      >
+                        −
+                      </button>
+                      <span className="min-w-5 text-center text-[15px] font-bold text-cocoa">
+                        {qty.toLocaleString("bn-BD")}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setQty((q) => Math.min(10, q + 1))}
+                        aria-label="পরিমাণ বাড়ান"
+                        className="flex h-8 w-8 items-center justify-center rounded-md border border-line bg-white text-[16px] text-cocoa transition hover:border-gold hover:text-terra-deep"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <p className="mt-4 rounded-lg bg-rose-soft/60 px-4 py-3 text-[13.5px] leading-relaxed text-cocoa-soft">
+                  {order.note}
+                </p>
+              </div>
             </div>
           </div>
         </div>

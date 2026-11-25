@@ -119,7 +119,7 @@ export const variants: Variant[] = [
 // SAMPLE reviews — replace with real customer words.
 export const reviews = {
   eyebrow: "গ্রাহকের প্রতিক্রিয়া",
-  heading: "মায়েরা যা বললেন",
+  heading: "গ্রাহকরা যা বললেন",
   sample: true,
   items: [
     { name: "আয়েশা র.", role: "সন্তুষ্ট ক্রেতা · নমুনা", quote: "প্রতিদিন ম্যাসাজের সময় তেলটা ব্যবহার করি — শিশুর ত্বক নরম থাকে, আর গন্ধটাও হালকা, মিষ্টি।" },
