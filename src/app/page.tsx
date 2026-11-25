@@ -184,9 +184,9 @@ export default function Home() {
             alt=""
             fill
             priority
-            className="object-cover opacity-45"
+            className="object-cover opacity-80"
           />
-          <div className="absolute inset-0 bg-cream/72" />
+          <div className="absolute inset-0 bg-cream/45" />
         </div>
         <div aria-hidden className="pointer-events-none absolute -left-24 top-8 h-72 w-72 bg-blur-green/45 blur-3xl" />
         <div aria-hidden className="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 bg-blur-pink/50 blur-3xl" />
@@ -297,7 +297,11 @@ export default function Home() {
             <div className="mt-4 h-1 w-16 bg-gold" />
           </div>
           <div className="reveal mt-10 grid overflow-hidden rounded-lg bg-white shadow-[0_36px_70px_-32px_rgb(74_46_27/0.45)] md:grid-cols-2">
-            <div className="relative flex items-center justify-center bg-cream-deep px-6 py-10">
+            <div className="relative flex items-center justify-center overflow-hidden px-6 py-10">
+              <div className="absolute inset-0">
+                <Image src="/baaric-wood.jpg" alt="" fill className="object-cover opacity-70" />
+                <div className="absolute inset-0 bg-cream/55" />
+              </div>
               <div aria-hidden className="pointer-events-none absolute left-6 top-6 h-24 w-24 bg-blur-pink/50 blur-2xl" />
               <Image
                 key={selected.id}
@@ -589,8 +593,8 @@ export default function Home() {
             </div>
             <div className="relative flex flex-col justify-center overflow-hidden px-7 py-10 sm:px-9">
               <div className="absolute inset-0">
-                <Image src="/baaric-wood.jpg" alt="" fill className="object-cover opacity-40" />
-                <div className="absolute inset-0 bg-cream/78" />
+                <Image src="/baaric-wood.jpg" alt="" fill className="object-cover opacity-75" />
+                <div className="absolute inset-0 bg-cream/60" />
               </div>
               <div className="relative">
                 <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">{order.eyebrow}</p>
