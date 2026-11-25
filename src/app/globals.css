@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Noto Serif Bengali", "Hind Siliguri", Georgia, serif;
+  --font-sans: "Hind Siliguri", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
+  /* Palette pulled from the actual product photos:
+     cream bottle, wooden cap, terracotta logo, pink florals,
+     deep leaf green background, gold palm. */
+  --color-cream: #fbf6ec;
+  --color-cream-deep: #f5ebd3;
+  --color-sand: #efe3c8;
+  --color-wood: #c9a06a;
+  --color-wood-deep: #a87f4e;
+  --color-terra: #d96a45;
+  --color-terra-deep: #b44a2a;
+  --color-rose: #e87a9a;
+  --color-rose-soft: #f6d7de;
+  --color-leaf: #2f4a22;
+  --color-leaf-deep: #22361a;
+  --color-leaf-soft: #e7eee0;
+  --color-gold: #b08d4a;
+  --color-cocoa: #3b2416;
+  --color-cocoa-soft: #6b4a33;
+  --color-cocoa-faint: #96755e;
+  --color-line: #eadfc8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #fbf6ec;
+  color: #3b2416;
+  font-family: var(--font-sans);
+  overflow-x: clip;
+}
+
+::selection {
+  background-color: #f6d7de;
+  color: #3b2416;
+}
+
+h1, h2, h3 {
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+/* Gentle float for hero badges */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: floaty 6s ease-in-out infinite;
+  will-change: transform;
+}
+.animate-float-slow {
+  animation: floaty 8s ease-in-out 1s infinite;
+  will-change: transform;
+}
+
+/* Hero entrance */
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-in { animation: heroIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.hero-in-delay { animation: heroIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both; }
+.hero-in-delay2 { animation: heroIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both; }
+
+/* Variant image swap */
+@keyframes fadeSlide {
+  from { opacity: 0; transform: scale(1.04); }
+  to { opacity: 1; transform: scale(1); }
+}
+.anim-swap { animation: fadeSlide 0.45s ease both; }
+
+/* Scroll reveal — initial state only; JS sets inline style (never classList),
+   so React re-renders (FAQ open etc.) can never wipe the visible state. */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* FAQ smooth open / close */
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.faq-panel.open { grid-template-rows: 1fr; }
+.faq-panel > div { overflow: hidden; }
+.faq-chevron { transition: transform 0.35s ease; }
+.faq-chevron.open { transform: rotate(45deg); }
+
+/* Leaf-green marquee strip */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 28s linear infinite;
+  will-change: transform;
+}
+
+.lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 34px -18px rgb(59 36 22 / 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float, .animate-float-slow, .marquee-track, .hero-in, .hero-in-delay, .hero-in-delay2, .anim-swap {
+    animation: none !important;
+  }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+}
