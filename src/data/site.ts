@@ -6,17 +6,17 @@
 // • NO price, delivery charge, COD or delivery-time claim anywhere
 //   on the site — none was supplied. The order form collects an
 //   order request; price + delivery are confirmed on the call.
-// • Photos (Nov 25, 2nd round): hero + massage-50 / hair-150 /
-//   coconut-200 singles are AI-generated brand-style images made
-//   from the original photos — hero has no banner text; singles are
-//   on clean white. HONEST: the massage-50 single's small label text
-//   is MIXED — top says "Baby Massage Oil" but below it reads
-//   "Gurhal and Bhringraj / Hair Growth & Scalp Conditioning"
-//   (hair oil's words). The real 50 ml massage oil is Pomegranate
-//   and Noni. Massage-150 is still a REAL crop of the original
-//   photo (baby in a hat behind the bottle). The bottles' real
-//   labels are unchanged in the real crops; the website brand is
-//   Baaric. A footnote on the variants section says so.
+// • Photos (Nov 25, 3rd round): hero is the 3-bottle composition the user
+//   re-sent (1720x1280); details image is the white-bg 3-bottle shot
+//   (brand-style, made from the real product). HONEST: the details
+//   image's hair-oil bottle reads "100 ml" in its small print (AI
+//   inconsistency) while the site lists Hair Oil 150 ml; the massage-50
+//   single's small label text is still MIXED (hair-oil words under
+//   "Baby Massage Oil"). The bottles' real "maate" labels are kept.
+// • Sizes (user, Nov 25 evening): THREE options only — Massage 50 ml,
+//   Hair 150 ml, Coconut 200 ml. The real Massage 150 ml size was
+//   REMOVED from the selector + order form on the user's instruction;
+//   add it back if he asks. Reviews are SAMPLES; no prices anywhere.
 // • Sizes are read off the bottle labels:
 //   Massage Oil 50 ml + 150 ml, Hair Oil 150 ml, Coconut Oil 200 ml.
 // • Reviews below are SAMPLE quotes — replace with real ones.
@@ -55,15 +55,13 @@ export const marquee = [
 ] as const;
 
 export const intro = {
-  eyebrow: "পরিচিতি",
+  eyebrow: "পণ্যের বিবরণ",
   heading: "ম্যাসাজের সময়টাই শিশুর সবচেয়ে প্রিয় সময়",
-  text: "হালকা গরম তেলে শিশুর হাত-পা মালিশ, চুলে আলতো করে তেল দেওয়া — এই ছোট ছোট যত্নেই শিশু বেড়ে ওঠে নিশ্চিন্তে। Baaric-এর তিনটি তেল সেই প্রতিদিনের যত্নের জন্যই — ম্যাসাজ, চুল আর ত্বক, তিনটিই একসাথে।",
   points: [
-    { title: "ম্যাসাজ", text: "ডালিম ও ননী ম্যাসাজ অয়েল — সুস্থ বৃদ্ধি ও পুষ্টির জন্য।" },
-    { title: "চুলের যত্ন", text: "গুড়হাল ও ভৃঙ্গরাজ হেয়ার অয়েল — চুলের বৃদ্ধি ও মাথার ত্বকের যত্নে।" },
-    { title: "ত্বকের আর্দ্রতা", text: "এক্সট্রা-ভার্জিন কোল্ড-প্রেসড কোকোনাট অয়েল — ত্বক ও চুলের আর্দ্রতায়।" },
+    { title: "ম্যাসাজ", text: "ডালিম ও ননী — সুস্থ বৃদ্ধি ও পুষ্টির জন্য।" },
+    { title: "চুলের যত্ন", text: "গুড়হাল ও ভৃঙ্গরাজ — চুলের বৃদ্ধি ও মাথার ত্বকের যত্নে।" },
+    { title: "ত্বকের আর্দ্রতা", text: "এক্সট্রা-ভার্জিন কোল্ড-প্রেসড কোকোনাট — ত্বক ও চুলের আর্দ্রতায়।" },
   ],
-  caption: "প্রতিদিনের ম্যাসাজের মুহূর্ত — বেবি হেয়ার অয়েল আর বেবি ম্যাসাজ অয়েল",
 } as const;
 
 export type Variant = {
@@ -84,24 +82,12 @@ export const variants: Variant[] = [
     id: "massage-50",
     name: "বেবি ম্যাসাজ অয়েল",
     labelEn: "Pomegranate and Noni · Healthy Growth & Nourishment",
-    variant: "ছোট প্যাক",
+    variant: "ম্যাসাজ",
     sizeBn: "৫০ মিলি",
     sizeMl: "50 ml",
     image: "/baaric-product-massage-50.jpg",
     alt: "বেবি ম্যাসাজ অয়েল — ৫০ মিলি বোতল",
-    desc: "প্রতিদিনের ম্যাসাজের জন্য ছোট প্যাক — ব্যাগে রাখা যায়, প্রথমবারের জন্যও সহজ।",
-    use: "ম্যাসাজের সময় ব্যবহার করুন",
-  },
-  {
-    id: "massage-150",
-    name: "বেবি ম্যাসাজ অয়েল",
-    labelEn: "Pomegranate and Noni · Healthy Growth & Nourishment",
-    variant: "বড় প্যাক",
-    sizeBn: "১৫০ মিলি",
-    sizeMl: "150 ml",
-    image: "/baaric-product-massage-150.jpg",
-    alt: "বেবি ম্যাসাজ অয়েল — ১৫০ মিলি বোতল",
-    desc: "প্রতিদিনের ম্যাসাজের জন্য বড় প্যাক — লম্বা সময়ের নিয়মিত যত্নে।",
+    desc: "প্রতিদিনের ম্যাসাজের জন্য — ডালিম ও ননী।",
     use: "ম্যাসাজের সময় ব্যবহার করুন",
   },
   {
@@ -113,7 +99,7 @@ export const variants: Variant[] = [
     sizeMl: "150 ml",
     image: "/baaric-product-hair-150.jpg",
     alt: "বেবি হেয়ার অয়েল — ১৫০ মিলি বোতল",
-    desc: "গুড়হাল ও ভৃঙ্গরাজ — চুলের বৃদ্ধি আর মাথার ত্বকের যত্নের জন্য।",
+    desc: "গুড়হাল ও ভৃঙ্গরাজ — চুলের বৃদ্ধি ও মাথার ত্বকের যত্নে।",
     use: "চুলে আলতো করে লাগান",
   },
   {
@@ -125,21 +111,10 @@ export const variants: Variant[] = [
     sizeMl: "200 ml",
     image: "/baaric-product-coconut-200.jpg",
     alt: "অর্গানিক কোকোনাট অয়েল — ২০০ মিলি বোতল",
-    desc: "এক্সট্রা-ভার্জিন কোল্ড-প্রেসড — ত্বক ও চুলের আর্দ্রতা ধরে রাখতে।",
+    desc: "এক্সট্রা-ভার্জিন কোল্ড-প্রেসড — ত্বক ও চুলের আর্দ্রতায়।",
     use: "ত্বক ও চুলে ব্যবহার করুন",
   },
 ];
-
-export const why = {
-  eyebrow: "কেন Baaric",
-  heading: "যত্নটা যেন হয় ঠিক মায়ের হাতের মতো",
-  items: [
-    { n: "০১", title: "আসল প্যাকেজিং", text: "ছবিতে যা দেখছেন, হাতে সেটাই পাবেন — লেবেলসহ আসল বোতল।" },
-    { n: "০২", title: "তিনটি তেল, একসাথে", text: "ম্যাসাজ, চুল আর ত্বক — শিশুর প্রতিদিনের যত্নের তিনটি দিক এক জায়গায়।" },
-    { n: "০৩", title: "লেবেলে লেখা উপাদান", text: "ডালিম ও ননী, গুড়হাল ও ভৃঙ্গরাজ, কোল্ড-প্রেসড কোকোনাট — যা লেবেলে লেখা, তাই।" },
-    { n: "০৪", title: "কোমল, প্রতিদিনের", text: "প্রতিদিনের ছোট যত্নের জন্য — ভারী কিছু নয়, সহজ রুটিন।" },
-  ],
-} as const;
 
 // SAMPLE reviews — replace with real customer words.
 export const reviews = {
@@ -150,7 +125,7 @@ export const reviews = {
     { name: "আয়েশা র.", role: "সন্তুষ্ট ক্রেতা · নমুনা", quote: "প্রতিদিন ম্যাসাজের সময় তেলটা ব্যবহার করি — শিশুর ত্বক নরম থাকে, আর গন্ধটাও হালকা, মিষ্টি।" },
     { name: "তানভীর হ.", role: "সন্তুষ্ট ক্রেতা · নমুনা", quote: "হেয়ার অয়েলটা চুলে দিলে চুল নরম হয়, মাথার ত্বকও শুকায় না। প্যাকেজিংটাও খুব সুন্দর।" },
     { name: "নুসরাত জ.", role: "সন্তুষ্ট ক্রেতা · নমুনা", quote: "কোকোনাট অয়েলটা ত্বকে আর চুলে দুই জায়গাতেই ব্যবহার করি। এক বোতলেই অনেক কাজ হয়।" },
-    { name: "রাফি ক.", role: "সন্তুষ্ট ক্রেতা · নমুনা", quote: "ছোট প্যাকটা প্রথমে নিয়েছিলাম, ভালো লাগায় বড় প্যাকটা নিলাম। ডেলিভারি নিয়েও কোনো ঝামেলা হয়নি।" },
+    { name: "রাফি ক.", role: "সন্তুষ্ট ক্রেতা · নমুনা", quote: "ম্যাসাজ অয়েলটা প্রথমে নিয়েছিলাম, ভালো লাগায় হেয়ার অয়েলটাও নিলাম। ডেলিভারি নিয়েও কোনো ঝামেলা হয়নি।" },
     { name: "মেহজাবিন স.", role: "সন্তুষ্ট ক্রেতা · নমুনা", quote: "ম্যাসাজের সময় শিশুটা শান্ত হয়ে যায় — এই রুটিনটা এখন আমাদের দুজনেরই প্রিয়।" },
     { name: "আরিফ ম.", role: "সন্তুষ্ট ক্রেতা · নমুনা", quote: "তিনটি তেল একসাথে পেয়ে সুবিধা হয়েছে। প্রতিটা বোতলের লেবেল পরিষ্কার, কী কী আছে বোঝা যায়।" },
   ],
@@ -162,10 +137,6 @@ export const faqs = [
     a: "ম্যাসাজ অয়েল — প্রতিদিনের ম্যাসাজের জন্য। হেয়ার অয়েল — চুলের বৃদ্ধি আর মাথার ত্বকের যত্নের জন্য। কোকোনাট অয়েল — ত্বক ও চুলের আর্দ্রতার জন্য। বোতলের লেবেলেই প্রতিটার ব্যবহার লেখা আছে।",
   },
   {
-    q: "ম্যাসাজ অয়েলের দুটি সাইজের মধ্যে পার্থক্য কী?",
-    a: "শুধু পরিমাণ — ৫০ মিলি ছোট প্যাক আর ১৫০ মিলি বড় প্যাক। তেল একই: ডালিম ও ননী ম্যাসাজ অয়েল। প্রথমবারের জন্য ছোট প্যাক, নিয়মিত ব্যবহারের জন্য বড় প্যাক।",
-  },
-  {
     q: "দাম কত? কীভাবে জানব?",
     a: "দাম ও ডেলিভারি চার্জ অর্ডারের পর কল করে নিশ্চিত করা হয়। নিচের ফর্মে অর্ডার দিন — আমরা কল করে দাম, ডেলিভারি আর আপনার পছন্দের প্যাকটি কনফার্ম করব।",
   },
@@ -175,7 +146,7 @@ export const faqs = [
   },
   {
     q: "ছবির বোতলে অন্য নাম লেখা কেন?",
-    a: "বোতলগুলো আসল পণ্যের — ম্যাসাজ অয়েল ১৫০ মিলির ছবিটি আসল ফটোরই অংশ, আর বাকি ছবিগুলো আসল পণ্য দেখে বানানো ব্র্যান্ড-স্টাইল ছবি। লেবেলে সরবরাহকারীর নাম দেখা যায়, ওয়েবসাইটের ব্র্যান্ড Baaric।",
+    a: "বোতলগুলো আসল পণ্যের — ছবিগুলো আসল পণ্য দেখে বানানো ব্র্যান্ড-স্টাইল ছবি, লেবেলের নাম অপরিবর্তিত। ওয়েবসাইটের ব্র্যান্ড Baaric।",
   },
 ] as const;
 

@@ -9,6 +9,11 @@
   --color-cream: #fbf6ec;
   --color-cream-deep: #f5ebd3;
   --color-sand: #efe3c8;
+  --color-herobg: #f3ead8;
+  --color-sage: #e8edde;
+  --color-peach: #f9e9de;
+  --color-goldsoft: #f7ecd2;
+  --color-rosedeep: #c4556b;
   --color-wood: #c9a06a;
   --color-wood-deep: #a87f4e;
   --color-terra: #d96a45;
@@ -30,7 +35,7 @@ html {
 }
 
 body {
-  background-color: #fbf6ec;
+  background-color: #f3ead8;
   color: #3b2416;
   font-family: var(--font-sans);
   overflow-x: clip;

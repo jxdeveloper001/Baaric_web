@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { faqs, hero, intro, marquee, order, reviews, site, variants, why } from "@/data/site";
+import { faqs, hero, intro, marquee, order, reviews, site, variants } from "@/data/site";
 
 const fade = "transition-all duration-300 ease-out";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [variantId, setVariantId] = useState("massage-150");
+  const [variantId, setVariantId] = useState("massage-50");
   const [qty, setQty] = useState(1);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -17,7 +17,7 @@ export default function Home() {
   const [done, setDone] = useState(false);
   const [orderId, setOrderId] = useState("");
 
-  const selected = variants.find((v) => v.id === variantId) ?? variants[1];
+  const selected = variants.find((v) => v.id === variantId) ?? variants[0];
 
   // ── Reviews slider: auto-advances right-to-left, infinite.
   //    The list is rendered twice; the position snaps back to 0
@@ -113,7 +113,6 @@ export default function Home() {
   const navLinks: Array<[string, string]> = [
     ["#intro", "পরিচিতি"],
     ["#variants", "পণ্য"],
-    ["#why", "কেন Baaric"],
     ["#reviews", "রিভিউ"],
     ["#faq", "জিজ্ঞাসা"],
   ];
@@ -172,47 +171,42 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ── Hero: full-bleed photo, no border, no frame.
-           Text sits on the image itself, bottom-centre, under a
-           light shadow layer for readability. */}
-      <section className="relative">
-        <div className="relative h-[86svh] min-h-[560px] w-full md:h-[92vh]">
-          <Image
-            src="/baaric-hero-product.jpg"
-            alt="Baaric বেবি অয়েল — ম্যাসাজ অয়েল, কোকোনাট অয়েল ও হেয়ার অয়েল"
-            fill
-            priority
-            className="object-cover object-center"
-          />
-          <div
-            className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-black/10"
-            aria-hidden
-          />
-          <div className="absolute inset-x-0 bottom-0 px-5 pb-12 text-center text-white drop-shadow-[0_2px_10px_rgb(0_0_0/0.45)] md:pb-16">
-            <p className="hero-in text-[13px] font-bold uppercase tracking-[0.22em] text-white/85">
-              {hero.eyebrow}
-            </p>
-            <h1 className="hero-in-delay mx-auto mt-3 max-w-3xl font-display text-[40px] font-bold leading-[1.2] sm:text-[54px] md:text-[64px]">
-              {hero.titleA}{" "}
-              <em className="not-italic text-rose-soft">{hero.highlight}</em>
-            </h1>
-            <p className="hero-in-delay2 mx-auto mt-4 max-w-xl text-[16px] leading-relaxed text-white/90 md:text-[18px]">
-              {hero.subtext}
-            </p>
-            <div className="hero-in-delay2 mt-7 flex flex-wrap items-center justify-center gap-3">
-              <a
-                href="#order"
-                className={`${fade} rounded-full bg-terra px-7 py-3.5 text-[16px] font-semibold text-white hover:-translate-y-0.5 hover:bg-terra-deep hover:shadow-[0_14px_24px_-10px_rgb(0_0_0/0.5)] active:scale-95`}
-              >
-                {hero.primaryCta}
-              </a>
-              <a
-                href="#variants"
-                className={`${fade} rounded-full border border-white/70 bg-white/10 px-7 py-3.5 text-[16px] font-semibold text-white backdrop-blur-sm hover:-translate-y-0.5 hover:bg-white/20 active:scale-95`}
-              >
-                {hero.secondaryCta}
-              </a>
+      {/* ── Hero: the photo in its own shape — never cropped.
+           Feathered edges melt it into the band below, where the
+           heading + order button sit (same on mobile + desktop). */}
+      <section className="bg-herobg">
+        <div className="mx-auto max-w-5xl px-3 pt-4 sm:px-6 md:pt-6">
+          <div className="[mask-image:linear-gradient(to_bottom,transparent,black_5%,black_88%,transparent_100%)]">
+            <div className="[mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)]">
+              <Image
+                src="/baaric-hero-product.jpg"
+                alt="Baaric বেবি অয়েল — ম্যাসাজ অয়েল, কোকোনাট অয়েল ও হেয়ার অয়েল"
+                width={1720}
+                height={1280}
+                priority
+                className="h-auto w-full"
+              />
             </div>
+          </div>
+        </div>
+        <div className="mx-auto max-w-3xl px-5 pb-16 pt-4 text-center md:pb-20">
+          <p className="hero-in text-[13px] font-bold uppercase tracking-[0.22em] text-terra-deep">
+            {hero.eyebrow}
+          </p>
+          <h1 className="hero-in-delay mx-auto mt-3 font-display text-[38px] font-bold leading-[1.2] text-cocoa sm:text-[52px] md:text-[60px]">
+            {hero.titleA}{" "}
+            <em className="not-italic text-terra">{hero.highlight}</em>
+          </h1>
+          <p className="hero-in-delay2 mx-auto mt-4 max-w-xl text-[16px] leading-relaxed text-cocoa-soft md:text-[18px]">
+            {hero.subtext}
+          </p>
+          <div className="hero-in-delay2 mt-7 flex justify-center">
+            <a
+              href="#order"
+              className={`${fade} rounded-full bg-terra px-8 py-3.5 text-[16px] font-semibold text-white shadow-[0_14px_28px_-12px_rgb(180_74_42/0.7)] hover:-translate-y-0.5 hover:bg-terra-deep active:scale-95`}
+            >
+              {hero.primaryCta}
+            </a>
           </div>
         </div>
       </section>
@@ -228,155 +222,153 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── Intro / story ── */}
-      <section id="intro" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 md:px-8">
-        <div className="reveal grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-          <div className="relative">
-            <div className="overflow-hidden rounded-[1.5rem] shadow-[0_30px_60px_-30px_rgb(59_36_22/0.45)]">
-              <Image
-                src="/baaric-lifestyle.jpg"
-                alt="শিশুর ম্যাসাজের মুহূর্ত — বেবি হেয়ার অয়েল ও বেবি ম্যাসাজ অয়েল"
-                width={1080}
-                height={1080}
-                className="aspect-square w-full object-cover"
-              />
-            </div>
-            <p className="relative z-10 -mt-10 ml-5 max-w-[320px] rounded-2xl bg-white/95 px-5 py-4 text-[14px] leading-relaxed text-cocoa-soft shadow-[0_16px_30px_-14px_rgb(59_36_22/0.35)] sm:ml-8">
-              {intro.caption}
-            </p>
-          </div>
-          <div>
+      {/* ── Product details: photo on top, no border, no frame;
+           three round tinted cards below — left, right, bottom. */}
+      <section id="intro" className="scroll-mt-24 bg-white py-16 md:py-20">
+        <div className="mx-auto max-w-6xl px-5 md:px-8">
+          <div className="reveal text-center">
             <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">{intro.eyebrow}</p>
-            <h2 className="mt-3 font-display text-[30px] font-bold text-cocoa sm:text-[38px]">{intro.heading}</h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-cocoa-soft">{intro.text}</p>
-            <div className="mt-8">
-              {intro.points.map((p, i) => (
-                <div key={p.title} className="flex gap-5 border-t border-line py-5 last:border-b">
-                  <span className="font-display text-[22px] font-bold text-rose">{["০১", "০২", "০৩"][i]}</span>
-                  <div>
-                    <h3 className="font-display text-[19px] font-bold text-cocoa">{p.title}</h3>
-                    <p className="mt-1 text-[15px] leading-relaxed text-cocoa-soft">{p.text}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Variants ── */}
-      <section id="variants" className="scroll-mt-24 bg-cream-deep/50 py-20">
-        <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <div className="reveal mx-auto max-w-2xl text-center">
-            <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">পণ্য</p>
-            <h2 className="mt-3 font-display text-[30px] font-bold text-cocoa sm:text-[38px]">
-              আপনার শিশুর জন্য কোনটি?
+            <h2 className="mx-auto mt-3 max-w-2xl font-display text-[30px] font-bold text-cocoa sm:text-[38px]">
+              {intro.heading}
             </h2>
-            <p className="mt-3 text-[16px] leading-relaxed text-cocoa-soft">
-              নিচের যেকোনো একটি বেছে নিন — ছবি, সাইজ আর ব্যবহার একসাথে বদলে যাবে।
-            </p>
           </div>
-
-          <div className="reveal mt-12 grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
-            <div>
-              <div className="overflow-hidden rounded-[1.5rem] border border-line bg-white shadow-[0_30px_60px_-30px_rgb(59_36_22/0.35)]">
-                <Image
-                  key={selected.id}
-                  src={selected.image}
-                  alt={selected.alt}
-                  width={900}
-                  height={900}
-                  className="anim-swap mx-auto h-[440px] w-auto object-contain sm:h-[520px]"
-                />
-              </div>
-              <div className="mt-5 flex justify-center gap-3">
-                {variants.map((v) => (
-                  <button
-                    key={v.id}
-                    type="button"
-                    onClick={() => setVariantId(v.id)}
-                    aria-label={`${v.name} ${v.sizeBn}`}
-                    className={`h-16 w-16 overflow-hidden rounded-full border-[3px] transition-all duration-300 ${
-                      v.id === selected.id
-                        ? "scale-110 border-terra shadow-[0_10px_20px_-8px_rgb(180_74_42/0.6)]"
-                        : "border-white opacity-70 hover:opacity-100"
-                    }`}
-                  >
-                    <Image src={v.image} alt="" width={120} height={120} className="h-full w-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col justify-center">
-              <p className="inline-flex w-fit items-center gap-2 rounded-full bg-leaf-soft px-4 py-1.5 text-[13px] font-bold text-leaf">
-                {selected.variant} · {selected.sizeBn}
-              </p>
-              <h3 className="mt-4 font-display text-[32px] font-bold leading-tight text-cocoa sm:text-[40px]">
-                {selected.name}
-              </h3>
-              <p className="mt-2 text-[14px] font-medium tracking-wide text-cocoa-faint">{selected.labelEn}</p>
-              <p className="mt-4 text-[17px] leading-relaxed text-cocoa-soft">{selected.desc}</p>
-              <p className="mt-4 flex items-center gap-2 text-[15px] font-semibold text-leaf">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-leaf-soft text-[13px]">✓</span>
-                {selected.use} · {selected.sizeMl}
-              </p>
-
-              <div className="mt-7 grid grid-cols-2 gap-3">
-                {variants.map((v) => (
-                  <button
-                    key={v.id}
-                    type="button"
-                    onClick={() => setVariantId(v.id)}
-                    className={`rounded-2xl border-2 px-4 py-3.5 text-left transition-all duration-300 ${
-                      v.id === selected.id
-                        ? "border-leaf bg-leaf text-cream shadow-[0_14px_24px_-12px_rgb(47_74_34/0.6)]"
-                        : "border-line bg-white/70 text-cocoa hover:border-leaf/50"
-                    }`}
-                  >
-                    <span className="block text-[14px] font-bold leading-snug">{v.name}</span>
-                    <span className={`mt-0.5 block text-[13px] font-medium ${v.id === selected.id ? "text-cream/80" : "text-cocoa-faint"}`}>
-                      {v.variant} · {v.sizeBn}
-                    </span>
-                  </button>
-                ))}
-              </div>
-
-              <a
-                href="#order"
-                className={`${fade} mt-7 inline-flex w-fit items-center gap-2 rounded-full bg-terra px-7 py-3.5 text-[16px] font-semibold text-white hover:-translate-y-0.5 hover:bg-terra-deep active:scale-95`}
+          <div className="reveal mx-auto mt-10 max-w-3xl">
+            <Image
+              src="/baaric-details-products.jpg"
+              alt="Baaric-এর তিনটি তেল — বেবি ম্যাসাজ অয়েল, অর্গানিক কোকোনাট অয়েল ও বেবি হেয়ার অয়েল"
+              width={1200}
+              height={892}
+              className="h-auto w-full"
+            />
+          </div>
+          <div className="mt-12 grid gap-5 md:grid-cols-2">
+            {intro.points.map((pt, i) => (
+              <article
+                key={pt.title}
+                className={`reveal rounded-[2rem] p-7 shadow-[0_22px_44px_-26px_rgb(59_36_22/0.4)] md:p-8 ${
+                  i === 2 ? "md:col-span-2 md:mx-auto md:w-full md:max-w-xl" : ""
+                } ${["bg-leaf-soft", "bg-rose-soft", "bg-goldsoft"][i]}`}
               >
-                এই প্যাকটি অর্ডার করুন →
-              </a>
-              <p className="mt-5 text-[13px] leading-relaxed text-cocoa-faint">
-                ছবিতে বোতলের আসল প্যাকেজিং ও লেবেল অপরিবর্তিত রাখা হয়েছে — প্রতিটি সাইজের ছবি আলাদা করে তোলা হয়েছে আসল ছবি থেকেই।
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Why Baaric ── */}
-      <section id="why" className="scroll-mt-24 bg-leaf-deep py-20 text-cream">
-        <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <div className="reveal max-w-2xl">
-            <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-rose">{why.eyebrow}</p>
-            <h2 className="mt-3 font-display text-[30px] font-bold sm:text-[38px]">{why.heading}</h2>
-          </div>
-          <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {why.items.map((item) => (
-              <div key={item.n} className="reveal border-t-2 border-cream/20 pt-6">
-                <p className="font-display text-[34px] font-bold text-rose">{item.n}</p>
-                <h3 className="mt-2 font-display text-[20px] font-bold">{item.title}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-cream/75">{item.text}</p>
-              </div>
+                <p className="font-display text-[26px] font-bold text-terra-deep">{["০১", "০২", "০৩"][i]}</p>
+                <h3 className="mt-1 font-display text-[21px] font-bold text-cocoa">{pt.title}</h3>
+                <p className="mt-1.5 text-[15px] leading-relaxed text-cocoa-soft">{pt.text}</p>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
+      {/* ── Product selection: one Gheeya-style pack card.
+           Top image swaps with the selected size; options, qty,
+           checkmarks and the dark order button live in the card. */}
+      <section id="variants" className="scroll-mt-24 bg-goldsoft py-20">
+        <div className="mx-auto max-w-3xl px-5 md:px-8">
+          <div className="reveal overflow-hidden rounded-[2rem] bg-white shadow-[0_36px_70px_-32px_rgb(59_36_22/0.45)]">
+            <div className="bg-white px-6 pt-8">
+              <Image
+                key={selected.id}
+                src={selected.image}
+                alt={selected.alt}
+                width={900}
+                height={900}
+                className="anim-swap mx-auto h-[280px] w-auto object-contain sm:h-[320px]"
+              />
+            </div>
+            <div className="px-6 pb-8 pt-6 sm:px-9">
+              <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-gold">প্যাক</p>
+              <h2 className="mt-2 font-display text-[30px] font-bold leading-tight text-cocoa sm:text-[36px]">
+                {selected.name}
+              </h2>
+              <p className="mt-2 text-[15px] leading-relaxed text-cocoa-soft">
+                {selected.variant} · {selected.sizeBn} — {selected.desc}
+              </p>
+
+              <p className="mt-7 font-display text-[16px] font-bold text-cocoa">পণ্য নির্বাচন করুন:</p>
+              <div className="mt-3 grid grid-cols-3 gap-2.5 sm:gap-3">
+                {variants.map((v) => {
+                  const active = v.id === selected.id;
+                  return (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() => setVariantId(v.id)}
+                      aria-pressed={active}
+                      className={`relative rounded-2xl border-2 px-3 py-3.5 text-left transition-all duration-300 sm:px-4 ${
+                        active ? "border-gold bg-goldsoft/50" : "border-line bg-white hover:border-gold/50"
+                      }`}
+                    >
+                      <span
+                        className={`absolute right-2.5 top-2.5 flex h-5 w-5 items-center justify-center rounded-full text-[12px] text-white ${
+                          active ? "bg-gold" : "bg-cocoa/15"
+                        }`}
+                      >
+                        ✓
+                      </span>
+                      <span className="block pr-5 text-[14px] font-bold leading-snug text-cocoa sm:text-[15px]">
+                        {v.variant}
+                      </span>
+                      <span className="mt-1 block text-[13px] font-medium text-cocoa-faint">{v.sizeBn}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="mt-4 flex flex-col gap-3 rounded-2xl bg-cream-deep/60 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="font-display text-[19px] font-bold whitespace-nowrap text-cocoa">
+                    {qty.toLocaleString("bn-BD")}টি × {selected.sizeBn}
+                  </p>
+                  <p className="mt-0.5 text-[13px] text-cocoa-soft">দাম ও ডেলিভারি কল করে নিশ্চিত করা হবে</p>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <span className="text-[14px] font-semibold text-cocoa-soft">পরিমাণ</span>
+                  <button
+                    type="button"
+                    onClick={() => setQty((q) => Math.max(1, q - 1))}
+                    aria-label="পরিমাণ কমান"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-[18px] text-cocoa transition hover:border-terra hover:text-terra-deep"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-5 text-center text-[17px] font-bold text-cocoa">
+                    {qty.toLocaleString("bn-BD")}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setQty((q) => Math.min(10, q + 1))}
+                    aria-label="পরিমাণ বাড়ান"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-[18px] text-cocoa transition hover:border-terra hover:text-terra-deep"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 rounded-2xl border border-line bg-white px-5 py-4">
+                {["আসল প্যাকেজিং", "লেবেলে লেখা উপাদান", "কোমল, প্রতিদিনের", "তিনটি তেল, একসাথে"].map((t) => (
+                  <p key={t} className="flex items-center gap-2 text-[14px] font-medium text-cocoa-soft">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gold text-[11px] text-white">
+                      ✓
+                    </span>
+                    {t}
+                  </p>
+                ))}
+              </div>
+
+              <a
+                href="#order"
+                className={`${fade} mt-6 block rounded-full bg-cocoa py-4 text-center text-[17px] font-bold text-white shadow-[0_16px_28px_-12px_rgb(59_36_22/0.7)] hover:-translate-y-0.5 active:scale-[0.98]`}
+              >
+                অর্ডার করুন — {selected.sizeBn}
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Reviews ── */}
-      <section id="reviews" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 md:px-8">
+      <section id="reviews" className="scroll-mt-24 bg-peach py-20">
+        <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="reveal flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">{reviews.eyebrow}</p>
@@ -433,6 +425,7 @@ export default function Home() {
             ))}
           </div>
         </div>
+        </div>
       </section>
 
       {/* ── FAQ ── */}
@@ -469,68 +462,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Order ── */}
-      <section id="order" className="mx-auto max-w-6xl scroll-mt-24 px-5 pb-20 md:px-8">
-        <div className="reveal overflow-hidden rounded-[1.5rem] bg-cream-deep/60">
-          <div className="grid lg:grid-cols-[1fr_1.1fr]">
-            <div className="bg-leaf px-7 py-10 text-cream sm:px-10">
-              <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-rose">{order.eyebrow}</p>
-              <h2 className="mt-3 font-display text-[28px] font-bold leading-snug sm:text-[34px]">{order.heading}</h2>
-              <p className="mt-3 text-[15px] leading-relaxed text-cream/80">{order.subtext}</p>
-
-              <div className="mt-8 flex items-center gap-4 rounded-2xl bg-white/10 p-4">
-                <div className="h-20 w-16 shrink-0 overflow-hidden rounded-xl bg-sand">
-                  <Image
-                    key={selected.id}
-                    src={selected.image}
-                    alt={selected.alt}
-                    width={160}
-                    height={200}
-                    className="anim-swap h-full w-full object-cover"
-                  />
-                </div>
-                <div>
-                  <p className="font-display text-[17px] font-bold leading-snug">{selected.name}</p>
-                  <p className="mt-1 text-[13px] text-cream/75">
-                    {selected.variant} · {selected.sizeBn} ({selected.sizeMl})
-                  </p>
-                  <div className="mt-3 flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setQty((q) => Math.max(1, q - 1))}
-                      aria-label="পরিমাণ কমান"
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-[18px] transition hover:bg-white/25"
-                    >
-                      −
-                    </button>
-                    <span className="min-w-6 text-center text-[16px] font-bold">
-                      {qty.toLocaleString("bn-BD")}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setQty((q) => Math.min(10, q + 1))}
-                      aria-label="পরিমাণ বাড়ান"
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-[18px] transition hover:bg-white/25"
-                    >
-                      +
-                    </button>
-                    <span className="text-[13px] text-cream/75">টি</span>
-                  </div>
-                </div>
-              </div>
-
-              <p className="mt-6 rounded-2xl bg-rose-soft/20 px-4 py-3 text-[13.5px] leading-relaxed text-cream/90">
-                {order.note}
-              </p>
-            </div>
-
-            <div className="px-7 py-10 sm:px-10">
+      {/* ── Order: white card, image + summary on top, form below. */}
+      <section id="order" className="scroll-mt-24 bg-sage py-20">
+        <div className="mx-auto max-w-3xl px-5 md:px-8">
+          <div className="reveal overflow-hidden rounded-[1.5rem] bg-white shadow-[0_30px_60px_-30px_rgb(59_36_22/0.35)]">
+            <div className="px-7 py-9 sm:px-10">
               {done ? (
-                <div className="flex h-full flex-col items-start justify-center py-6 text-left">
+                <div className="flex flex-col items-start justify-start py-4 text-left">
                   <span className="flex h-14 w-14 items-center justify-center rounded-full bg-leaf text-[26px] text-cream">✓</span>
                   <h3 className="mt-5 font-display text-[26px] font-bold text-cocoa">{order.successTitle}</h3>
                   <p className="mt-2 text-[15px] leading-relaxed text-cocoa-soft">{order.successText}</p>
-                  <p className="mt-5 rounded-2xl bg-white/80 px-5 py-4 text-[15px] leading-relaxed text-cocoa">
+                  <p className="mt-5 w-full rounded-2xl bg-cream-deep/60 px-5 py-4 text-[15px] leading-relaxed text-cocoa">
                     অর্ডার আইডি: <strong>{orderId}</strong>
                     <br />
                     {selected.name} · {selected.sizeBn} · {qty.toLocaleString("bn-BD")} টি
@@ -551,59 +493,94 @@ export default function Home() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={submit} className="flex flex-col gap-4">
-                  <div>
-                    <label htmlFor="o-name" className="mb-1.5 block font-display text-[15px] font-bold text-cocoa">
-                      আপনার নাম
-                    </label>
-                    <input
-                      id="o-name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                      placeholder="যেমন: আয়েশা রহমান"
-                      className="w-full rounded-2xl border border-line bg-white px-4 py-3.5 text-[16px] text-cocoa outline-none transition placeholder:text-cocoa-faint focus:border-terra focus:ring-2 focus:ring-terra/20"
-                    />
+                <>
+                  <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">{order.eyebrow}</p>
+                  <h2 className="mt-2 font-display text-[28px] font-bold leading-snug text-cocoa sm:text-[34px]">
+                    {order.heading}
+                  </h2>
+                  <p className="mt-2 text-[15px] leading-relaxed text-cocoa-soft">{order.subtext}</p>
+
+                  <div className="mt-7 flex items-center gap-4 rounded-2xl bg-cream-deep/60 p-4">
+                    <div className="h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-white">
+                      <Image
+                        key={selected.id}
+                        src={selected.image}
+                        alt={selected.alt}
+                        width={160}
+                        height={200}
+                        className="anim-swap h-full w-full object-contain"
+                      />
+                    </div>
+                    <div>
+                      <p className="font-display text-[18px] font-bold leading-snug text-cocoa">{selected.name}</p>
+                      <p className="mt-1 text-[14px] text-cocoa-soft">
+                        {selected.variant} · {selected.sizeBn} ({selected.sizeMl})
+                      </p>
+                      <p className="mt-1 text-[14px] font-semibold text-leaf">
+                        পরিমাণ: {qty.toLocaleString("bn-BD")} টি
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <label htmlFor="o-phone" className="mb-1.5 block font-display text-[15px] font-bold text-cocoa">
-                      ফোন নম্বর
-                    </label>
-                    <input
-                      id="o-phone"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      required
-                      inputMode="tel"
-                      placeholder="০১XXXXXXXXX"
-                      className="w-full rounded-2xl border border-line bg-white px-4 py-3.5 text-[16px] text-cocoa outline-none transition placeholder:text-cocoa-faint focus:border-terra focus:ring-2 focus:ring-terra/20"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="o-address" className="mb-1.5 block font-display text-[15px] font-bold text-cocoa">
-                      ডেলিভারির ঠিকানা
-                    </label>
-                    <textarea
-                      id="o-address"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      required
-                      rows={3}
-                      placeholder="বাসা/হোল্ডিং, রোড, এলাকা, জেলা"
-                      className="w-full resize-none rounded-2xl border border-line bg-white px-4 py-3.5 text-[16px] text-cocoa outline-none transition placeholder:text-cocoa-faint focus:border-terra focus:ring-2 focus:ring-terra/20"
-                    />
-                  </div>
-                  <p className="text-[14px] leading-relaxed text-cocoa-soft">
-                    নির্বাচিত পণ্য: <strong className="text-cocoa">{selected.name} · {selected.sizeBn}</strong> —{" "}
-                    {qty.toLocaleString("bn-BD")} টি
+                  <p className="mt-4 rounded-2xl bg-rose-soft/40 px-4 py-3 text-[13.5px] leading-relaxed text-cocoa-soft">
+                    {order.note}
                   </p>
-                  <button
-                    type="submit"
-                    className={`${fade} mt-1 w-full rounded-full bg-terra py-4 text-[17px] font-bold text-white hover:-translate-y-0.5 hover:bg-terra-deep hover:shadow-[0_16px_28px_-12px_rgb(180_74_42/0.7)] active:scale-[0.98]`}
-                  >
-                    {order.submit} — {selected.sizeBn}
-                  </button>
-                </form>
+
+                  <form onSubmit={submit} className="mt-7 flex flex-col gap-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label htmlFor="o-name" className="mb-1.5 block font-display text-[15px] font-bold text-cocoa">
+                          আপনার নাম
+                        </label>
+                        <input
+                          id="o-name"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          required
+                          placeholder="যেমন: আয়েশা রহমান"
+                          className="w-full rounded-2xl border border-line bg-white px-4 py-3.5 text-[16px] text-cocoa outline-none transition placeholder:text-cocoa-faint focus:border-terra focus:ring-2 focus:ring-terra/20"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="o-phone" className="mb-1.5 block font-display text-[15px] font-bold text-cocoa">
+                          ফোন নম্বর
+                        </label>
+                        <input
+                          id="o-phone"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          required
+                          inputMode="tel"
+                          placeholder="০১XXXXXXXXX"
+                          className="w-full rounded-2xl border border-line bg-white px-4 py-3.5 text-[16px] text-cocoa outline-none transition placeholder:text-cocoa-faint focus:border-terra focus:ring-2 focus:ring-terra/20"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label htmlFor="o-address" className="mb-1.5 block font-display text-[15px] font-bold text-cocoa">
+                        ডেলিভারির ঠিকানা
+                      </label>
+                      <textarea
+                        id="o-address"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        required
+                        rows={3}
+                        placeholder="বাসা/হোল্ডিং, রোড, এলাকা, জেলা"
+                        className="w-full resize-none rounded-2xl border border-line bg-white px-4 py-3.5 text-[16px] text-cocoa outline-none transition placeholder:text-cocoa-faint focus:border-terra focus:ring-2 focus:ring-terra/20"
+                      />
+                    </div>
+                    <p className="text-[14px] leading-relaxed text-cocoa-soft">
+                      নির্বাচিত পণ্য: <strong className="text-cocoa">{selected.name} · {selected.sizeBn}</strong> —{" "}
+                      {qty.toLocaleString("bn-BD")} টি
+                    </p>
+                    <button
+                      type="submit"
+                      className={`${fade} mt-1 w-full rounded-full bg-terra py-4 text-[17px] font-bold text-white hover:-translate-y-0.5 hover:bg-terra-deep hover:shadow-[0_16px_28px_-12px_rgb(180_74_42/0.7)] active:scale-[0.98]`}
+                    >
+                      {order.submit} — {selected.sizeBn}
+                    </button>
+                  </form>
+                </>
               )}
             </div>
           </div>
