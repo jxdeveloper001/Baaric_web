@@ -195,12 +195,17 @@ export default function Home() {
     { src: "/baaric-cut-coconut.png", alt: "অর্গানিক কোকোনাট অয়েল — ২০০ মিলি বোতল", w: 689, h: 1288, cls: "h-[230px] sm:h-[280px] md:h-[350px]" },
     { src: "/baaric-cut-hair.png", alt: "বেবি হেয়ার অয়েল — ১৫০ মিলি বোতল", w: 793, h: 1260, cls: "h-[200px] sm:h-[250px] md:h-[310px]" },
   ];
+const cutoutDims: Record<string, [number, number]> = {
+  "massage-50": [522, 1007],
+  "hair-150": [793, 1260],
+  "coconut-200": [689, 1288],
+};
 
   return (
     <main className="min-h-screen bg-white">
       {/* ── Header: white, logo left, nav centre, icons right
            (cart with qty badge, search, green circle menu) ── */}
-      <header className="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-line bg-white/95 shadow-[0_10px_30px_-18px_rgb(0_0_0/0.25)] backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5 md:px-8">
           <a href="#" className="flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green text-white">
@@ -275,7 +280,8 @@ export default function Home() {
       {/* ── Hero: white, big heavy headline, gold pill button,
            real bottle cutouts standing on the green arch, big leaves
            at the top corners, flower + coconut bowl at the arch base. ── */}
-      <section className="relative overflow-hidden bg-white pt-12 md:pt-16">
+      <section className="relative overflow-hidden pt-12 md:pt-16" style={{ backgroundImage: "url(/baaric-bg-hero.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
+      <div aria-hidden className="absolute inset-0 bg-white/55" />
         <Leaf className="animate-float absolute -left-3 top-8 z-0 h-14 w-14 -rotate-[30deg] text-green md:h-20 md:w-20" />
         <Leaf className="animate-float-slow absolute -right-3 top-12 z-0 h-12 w-12 rotate-[25deg] text-green md:h-16 md:w-16" />
         <div className="relative z-10 mx-auto max-w-6xl px-5 text-center md:px-8">
@@ -283,7 +289,8 @@ export default function Home() {
             {hero.eyebrow}
           </p>
           <h1 className="hero-in-delay mx-auto mt-3 max-w-3xl font-display text-[38px] font-black leading-[1.15] text-ink sm:text-[56px] md:text-[68px]">
-            {hero.titleA} {hero.highlight}
+            {hero.titleA}{" "}
+            <span className="relative inline-block whitespace-nowrap"><span className="text-gradient">{hero.highlight}</span><svg className="absolute -bottom-2 left-0 h-3 w-full sm:-bottom-3 sm:h-4" viewBox="0 0 300 12" fill="none" preserveAspectRatio="none" aria-hidden><path d="M3 9 C 60 3, 150 2, 297 7" stroke="#F9A430" strokeWidth="5" strokeLinecap="round" /></svg></span>
           </h1>
           <p className="hero-in-delay2 mx-auto mt-4 max-w-xl text-[16px] leading-relaxed text-ink-soft md:text-[17px]">
             {hero.subtext}
@@ -291,15 +298,17 @@ export default function Home() {
           <div className="hero-in-delay2 mt-7">
             <a
               href="#order"
-              className={`${fade} inline-block rounded-full bg-gold px-9 py-3.5 text-[16px] font-bold text-ink shadow-[0_14px_26px_-12px_rgb(249_164_48/0.8)] hover:-translate-y-0.5 hover:bg-gold-deep hover:text-white active:scale-95`}
+              className={`${fade} inline-block rounded-full btn-gold px-9 py-3.5 text-[16px] font-bold text-ink hover:-translate-y-0.5 active:scale-95`}
             >
               {hero.primaryCta}
             </a>
           </div>
         </div>
         <div className="relative mx-auto mt-10 max-w-3xl md:mt-12">
-          <div aria-hidden className="absolute bottom-0 left-1/2 aspect-[1.5/1] w-[min(560px,125%)] -translate-x-1/2 rounded-t-full bg-green md:aspect-[1.7/1] md:w-[min(860px,112%)]" />
-          <div aria-hidden className="absolute bottom-1 left-1/2 z-10 h-5 w-3/4 -translate-x-1/2 rounded-full bg-black/20 blur-xl" />
+          <div aria-hidden className="absolute bottom-0 left-1/2 aspect-[1.5/1] w-[min(560px,125%)] -translate-x-1/2 rounded-t-full arch-gradient md:aspect-[1.7/1] md:w-[min(860px,112%)]" />
+          <div aria-hidden className="absolute bottom-0 left-1/2 aspect-[1.5/1] w-[min(560px,125%)] -translate-x-1/2 rounded-t-full md:aspect-[1.7/1] md:w-[min(860px,112%)]" style={{ background: "radial-gradient(ellipse 60% 45% at 50% 0%, rgba(255,255,255,0.28), transparent 70%)" }} />
+          <div aria-hidden className="absolute bottom-0 left-1/2 h-[55%] w-[70%] max-w-[700px] -translate-x-1/2 rounded-full" style={{ background: "radial-gradient(ellipse at center, rgba(255,255,255,0.55), rgba(255,255,255,0) 70%)" }} />
+          <div aria-hidden className="absolute bottom-1 left-1/2 z-10 h-7 w-[85%] -translate-x-1/2 rounded-full bg-black/30 blur-2xl" />
           <div className="absolute bottom-[4%] left-[1%] z-20 h-14 w-14 overflow-hidden rounded-full ring-4 ring-white/70 shadow-lg sm:h-24 sm:w-24 md:h-32 md:w-32">
             <Image src="/baaric-flower.jpg" alt="" width={280} height={280} className="h-full w-full object-cover" />
           </div>
@@ -342,8 +351,9 @@ export default function Home() {
 
       {/* ── Green band: 4 features (gold icons) + coconut bowl circle,
            irregular torn edges ── */}
-      <section id="features" className="torn scroll-mt-24 bg-green py-24 md:py-28">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 md:grid-cols-[1fr_auto] md:px-8">
+      <section id="features" className="torn relative scroll-mt-24 overflow-hidden py-24 md:py-28" style={{ backgroundImage: "url(/baaric-bg-green.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
+      <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-green/80 via-green/85 to-green-dark/90" />
+        <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-12 px-5 md:grid-cols-[1fr_auto] md:px-8">
           <div className="reveal">
             <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-white/80">কেন Baaric</p>
             <h2 className="mt-3 font-display text-[30px] font-extrabold leading-tight text-white sm:text-[38px]">
@@ -365,8 +375,9 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="reveal mx-auto">
-            <div className="h-[240px] w-[240px] overflow-hidden rounded-full ring-4 ring-white/40 md:h-[280px] md:w-[280px]">
+          <div className="reveal relative mx-auto">
+            <div aria-hidden className="absolute -inset-8 rounded-full bg-white/15 blur-3xl" />
+            <div className="relative h-[240px] w-[240px] overflow-hidden rounded-full ring-4 ring-white/40 md:h-[280px] md:w-[280px]">
               <Image
                 src="/baaric-bowl.jpg"
                 alt="আধা নারকেল — কোকোনাট অয়েলের আসল উপাদান"
@@ -392,16 +403,16 @@ export default function Home() {
           {variants.map((v, i) => (
             <article
               key={v.id}
-              className={`reveal grid items-center gap-8 py-12 md:grid-cols-2 md:gap-14 ${i > 0 ? "border-t border-line" : ""}`}
+              className="reveal panel-soft mt-12 grid items-center gap-8 p-6 sm:p-8 md:grid-cols-2 md:gap-14 md:p-12"
             >
               <div className={`relative ${i % 2 === 1 ? "md:order-2" : ""}`}>
-                <div aria-hidden className="dots absolute left-1/2 top-1/2 h-[380px] w-[380px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-pale/70 md:h-[440px] md:w-[440px]" />
+                <div aria-hidden className="dots absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-pale/70 sm:h-[380px] sm:w-[380px] md:h-[440px] md:w-[440px]" />
                 <Image
                   src={v.image}
                   alt={v.alt}
-                  width={1600}
-                  height={1600}
-                  className="relative mx-auto w-full max-w-[320px] object-contain md:max-w-[360px]"
+                  width={cutoutDims[v.id][0]}
+                  height={cutoutDims[v.id][1]}
+                  className="relative mx-auto h-[340px] w-auto object-contain drop-shadow-[0_28px_32px_rgb(0_0_0/0.22)] sm:h-[400px] md:h-[440px]"
                 />
                 <Leaf className="absolute bottom-8 right-[10%] h-8 w-8 rotate-[20deg] text-green" />
               </div>
@@ -418,7 +429,7 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => pick(v.id)}
-                    className={`${fade} rounded-full bg-green px-8 py-3 text-[15px] font-bold text-white shadow-[0_12px_22px_-10px_rgb(13_156_77/0.7)] hover:-translate-y-0.5 hover:bg-green-deep active:scale-95`}
+                    className={`${fade} rounded-full btn-green px-8 py-3 text-[15px] font-bold text-white hover:-translate-y-0.5 active:scale-95`}
                   >
                     অর্ডার করুন
                   </button>
@@ -464,8 +475,9 @@ export default function Home() {
       </section>
 
       {/* ── Formula band: green, text left, circular photo right ── */}
-      <section className="bg-green py-16 md:py-20">
-        <div className="mx-auto grid max-w-5xl items-center gap-10 px-5 md:grid-cols-[1fr_auto] md:px-8">
+      <section className="relative overflow-hidden py-16 md:py-20" style={{ backgroundImage: "url(/baaric-bg-green.jpg)", backgroundSize: "cover", backgroundPosition: "center bottom" }}>
+      <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-green-dark/85 via-green/80 to-green/85" />
+        <div className="relative z-10 mx-auto grid max-w-5xl items-center gap-10 px-5 md:grid-cols-[1fr_auto] md:px-8">
           <div className="reveal text-center md:text-left">
             <h2 className="font-display text-[30px] font-extrabold text-white sm:text-[36px]">{formula.heading}</h2>
             <p className="mx-auto mt-3 max-w-lg text-[16px] leading-relaxed text-white/85 md:mx-0">
@@ -473,19 +485,20 @@ export default function Home() {
             </p>
             <a
               href="#order"
-              className={`${fade} mt-7 inline-block rounded-full bg-gold px-8 py-3 text-[15px] font-bold text-ink shadow-[0_12px_22px_-10px_rgb(0_0_0/0.35)] hover:-translate-y-0.5 hover:bg-gold-deep hover:text-white active:scale-95`}
+              className={`${fade} mt-7 inline-block rounded-full btn-gold px-8 py-3 text-[15px] font-bold text-ink hover:-translate-y-0.5 active:scale-95`}
             >
               অর্ডার করুন
             </a>
           </div>
           <div className="reveal mx-auto">
-            <div className="h-[220px] w-[220px] overflow-hidden rounded-full ring-4 ring-white/40 md:h-[260px] md:w-[260px]">
+            <div className="relative h-[220px] w-[220px] overflow-hidden rounded-full ring-4 ring-white/40 md:h-[260px] md:w-[260px]">
+              <div aria-hidden className="absolute inset-0 rounded-full" style={{ background: "radial-gradient(circle at 50% 40%, rgba(255,255,255,0.22), rgba(255,255,255,0) 70%)" }} />
               <Image
-                src="/baaric-details-products.jpg"
+                src="/baaric-cut-trio.png"
                 alt="Baaric-এর তিনটি তেল — বেবি ম্যাসাজ অয়েল, অর্গানিক কোকোনাট অয়েল ও বেবি হেয়ার অয়েল"
-                width={1808}
-                height={1344}
-                className="h-full w-full object-cover"
+                width={992}
+                height={1109}
+                className="relative z-10 h-full w-full object-contain p-8"
               />
             </div>
           </div>
@@ -521,9 +534,9 @@ export default function Home() {
                   <Image
                     src={v.image}
                     alt={v.alt}
-                    width={1600}
-                    height={1600}
-                    className="mx-auto h-52 w-auto object-contain"
+                    width={cutoutDims[v.id][0]}
+                    height={cutoutDims[v.id][1]}
+                    className="mx-auto h-52 w-auto object-contain drop-shadow-[0_20px_22px_rgb(0_0_0/0.18)]"
                   />
                   <h3 className="mt-4 font-display text-[20px] font-extrabold text-ink">{v.name}</h3>
                   <p className="mt-1 text-[14px] text-ink-faint">
@@ -532,7 +545,7 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => pick(v.id)}
-                    className={`${fade} mt-5 w-full rounded-full bg-gold py-3 text-[15px] font-bold text-ink hover:-translate-y-0.5 hover:bg-gold-deep hover:text-white active:scale-[0.98]`}
+                    className={`${fade} mt-5 w-full rounded-full btn-gold py-3 text-[15px] font-bold text-ink hover:-translate-y-0.5 active:scale-[0.98]`}
                   >
                     অর্ডার করুন
                   </button>
@@ -545,8 +558,9 @@ export default function Home() {
       </section>
 
       {/* ── Reviews: BLACK section, dark cards (reference testimonials) ── */}
-      <section id="reviews" className="scroll-mt-24 bg-ink py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-5 md:px-8">
+      <section id="reviews" className="relative scroll-mt-24 overflow-hidden py-16 md:py-20" style={{ backgroundImage: "url(/baaric-bg-dark.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
+      <div aria-hidden className="absolute inset-0 bg-ink/70" />
+        <div className="relative z-10 mx-auto max-w-6xl px-5 md:px-8">
           <div className="reveal flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-gold">{reviews.eyebrow}</p>
@@ -593,7 +607,7 @@ export default function Home() {
               {[...reviews.items, ...reviews.items].map((r, i) => (
                 <article
                   key={i}
-                  className="w-[86%] shrink-0 rounded-2xl border border-white/10 bg-white/[0.06] p-6 sm:w-[47%] lg:w-[31.5%]"
+                  className="w-[86%] shrink-0 rounded-2xl glass p-6 sm:w-[47%] lg:w-[31.5%]"
                 >
                   <p className="text-[17px] tracking-[0.2em] text-gold">★★★★★</p>
                   <p className="mt-3 text-[16px] leading-relaxed text-white/85">“{r.quote}”</p>
@@ -643,9 +657,9 @@ export default function Home() {
       </section>
 
       {/* ── Order: form on the left, green summary panel on the right. ── */}
-      <section id="order" className="scroll-mt-24 bg-green-pale py-16 md:py-20">
+      <section id="order" className="relative scroll-mt-24 overflow-hidden py-16 md:py-20" style={{ background: "linear-gradient(180deg, #F2FBF5 0%, #FFFFFF 45%, #FEF3DF 100%)" }}>
         <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <div className="reveal grid overflow-hidden rounded-2xl bg-white shadow-[0_30px_60px_-30px_rgb(10_10_10/0.35)] md:grid-cols-[1.2fr_1fr]">
+          <div className="reveal grid overflow-hidden rounded-2xl bg-white shadow-[0_40px_80px_-24px_rgb(10_10_10/0.45)] md:grid-cols-[1.2fr_1fr]">
             <div className="px-7 py-9 sm:px-9">
               {done ? (
                 <div className="flex h-full flex-col items-start justify-center py-4 text-left">
@@ -723,14 +737,14 @@ export default function Home() {
                   </p>
                   <button
                     type="submit"
-                    className={`${fade} mt-1 w-full rounded-full bg-green py-4 text-[17px] font-bold text-white shadow-[0_16px_28px_-12px_rgb(13_156_77/0.7)] hover:-translate-y-0.5 hover:bg-green-deep active:scale-[0.98]`}
+                    className={`${fade} mt-1 w-full rounded-full btn-green py-4 text-[17px] font-bold text-white hover:-translate-y-0.5 active:scale-[0.98]`}
                   >
                     {order.submit} — {selected.sizeBn}
                   </button>
                 </form>
               )}
             </div>
-            <div className="flex flex-col justify-center bg-green px-7 py-10 sm:px-9">
+            <div className="flex flex-col justify-center panel-green px-7 py-10 sm:px-9">
               <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-gold-soft">{order.eyebrow}</p>
               <h2 className="mt-2 font-display text-[28px] font-extrabold leading-snug text-white sm:text-[32px]">
                 {order.heading}
@@ -742,8 +756,8 @@ export default function Home() {
                     key={selected.id}
                     src={selected.image}
                     alt={selected.alt}
-                    width={160}
-                    height={200}
+                    width={cutoutDims[selected.id][0]}
+                    height={cutoutDims[selected.id][1]}
                     className="anim-swap h-full w-full object-contain"
                   />
                 </div>
@@ -785,8 +799,10 @@ export default function Home() {
       </section>
 
       {/* ── Footer: black, 3 columns ── */}
-      <footer className="bg-ink py-12 text-white">
-        <div className="mx-auto max-w-6xl px-5 md:px-8">
+      <footer className="relative overflow-hidden bg-ink py-12 text-white" style={{ backgroundImage: "url(/baaric-bg-dark.jpg)", backgroundSize: "cover", backgroundPosition: "center bottom" }}>
+      <div aria-hidden className="absolute inset-0 bg-ink/75" />
+      <div aria-hidden className="absolute inset-x-0 top-0 z-20 h-1 bg-gradient-to-r from-green via-gold to-green" />
+        <div className="relative z-10 mx-auto max-w-6xl px-5 md:px-8">
           <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
             <div>
               <p className="flex items-center gap-2 font-display text-[28px] font-extrabold leading-none">
@@ -813,7 +829,7 @@ export default function Home() {
               <p className="mt-2 max-w-[220px] text-[14px] leading-relaxed text-white/60">{site.contactNote}</p>
               <a
                 href="#order"
-                className={`${fade} mt-4 inline-block rounded-full bg-gold px-6 py-2.5 text-[14px] font-bold text-ink hover:bg-gold-deep hover:text-white`}
+                className={`${fade} mt-4 inline-block rounded-full btn-gold px-6 py-2.5 text-[14px] font-bold text-ink`}
               >
                 অর্ডার করুন
               </a>

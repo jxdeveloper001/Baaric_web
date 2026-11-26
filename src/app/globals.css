@@ -146,3 +146,43 @@ h1, h2, h3 {
   .reveal { opacity: 1; transform: none; transition: none; }
   html { scroll-behavior: auto; }
 }
+
+/* ── Round 10 art treatment: gradients, glow, glass ── */
+.btn-gold {
+  background: linear-gradient(180deg, #fdba4e 0%, #f9a430 45%, #f07f0a 100%);
+  box-shadow: 0 14px 26px -12px rgb(249 164 48 / 0.8), inset 0 1px 0 rgb(255 255 255 / 0.55);
+  transition: filter 0.2s ease;
+}
+.btn-gold:hover { filter: brightness(1.07); }
+.btn-green {
+  background: linear-gradient(180deg, #14c464 0%, #0d9c4d 50%, #067a3a 100%);
+  box-shadow: 0 12px 22px -10px rgb(13 156 77 / 0.7), inset 0 1px 0 rgb(255 255 255 / 0.35);
+  transition: filter 0.2s ease;
+}
+.btn-green:hover { filter: brightness(1.08); }
+.arch-gradient {
+  background: radial-gradient(ellipse 90% 60% at 50% 0%, #2fcb74 0%, #0d9c4d 45%, #067a3a 100%);
+  box-shadow: 0 -24px 70px -20px rgb(13 156 77 / 0.55);
+}
+.text-gradient {
+  background: linear-gradient(92deg, #0d9c4d 0%, #1db954 35%, #f9a430 75%, #e8890c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.panel-green {
+  background: linear-gradient(135deg, #0fae56 0%, #0d9c4d 40%, #087a3c 100%);
+}
+.panel-soft {
+  background: linear-gradient(135deg, #e6f6ec 0%, #ffffff 45%, #fef3df 100%);
+  border: 1px solid rgb(13 156 77 / 0.12);
+  border-radius: 28px;
+  box-shadow: 0 30px 60px -28px rgb(13 156 77 / 0.35), 0 12px 28px -18px rgb(0 0 0 / 0.18);
+}
+.glass {
+  background: rgb(255 255 255 / 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgb(255 255 255 / 0.16);
+  box-shadow: 0 24px 48px -16px rgb(0 0 0 / 0.6);
+}
