@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Noto Serif Bengali", "Hind Siliguri", Georgia, serif;
+  --font-display: "Noto Sans Bengali", "Hind Siliguri", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Hind Siliguri", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
-  /* Round 8 — clone of the user's reference landing page (Suonix-style):
+  /* Round 8/9 — clone of the user's reference landing page (Suonix-style):
      vivid green #0D9C4D + gold #F9A430 + near-black + white.
-     Colours sampled from the reference image. Pill buttons, circular
-     images, green arch hero, torn-edge green bands. Wood theme dropped. */
+     Colours sampled from the reference image. Heavy sans display type
+     (Noto Sans Bengali 800/900), pill buttons, circular images,
+     green arch hero, torn-edge green bands. Wood theme dropped. */
   --color-green: #0d9c4d;
   --color-green-deep: #0a7a3c;
   --color-green-dark: #086b33;
@@ -43,23 +44,30 @@ h1, h2, h3 {
   text-wrap: balance;
 }
 
-/* Torn / rough edges for the green bands (reference look) */
+/* Torn / rough edges for the green bands (reference look) —
+   deliberately irregular depths, like torn paper, not a neat zigzag */
 .torn {
   clip-path: polygon(
-    0% 14px, 4% 4px, 8% 14px, 12% 4px, 16% 14px, 20% 4px, 24% 14px, 28% 4px,
-    32% 14px, 36% 4px, 40% 14px, 44% 4px, 48% 14px, 52% 4px, 56% 14px, 60% 4px,
-    64% 14px, 68% 4px, 72% 14px, 76% 4px, 80% 14px, 84% 4px, 88% 14px, 92% 4px,
-    96% 14px, 100% 4px,
-    100% calc(100% - 14px), 96% calc(100% - 4px), 92% calc(100% - 14px),
-    88% calc(100% - 4px), 84% calc(100% - 14px), 80% calc(100% - 4px),
-    76% calc(100% - 14px), 72% calc(100% - 4px), 68% calc(100% - 14px),
-    64% calc(100% - 4px), 60% calc(100% - 14px), 56% calc(100% - 4px),
-    52% calc(100% - 14px), 48% calc(100% - 4px), 44% calc(100% - 14px),
-    40% calc(100% - 4px), 36% calc(100% - 14px), 32% calc(100% - 4px),
-    28% calc(100% - 14px), 24% calc(100% - 4px), 20% calc(100% - 14px),
-    16% calc(100% - 4px), 12% calc(100% - 14px), 8% calc(100% - 4px),
-    4% calc(100% - 14px), 0% calc(100% - 4px)
+    0% 12px, 4% 4px, 8% 18px, 12% 6px, 16% 22px, 20% 8px, 24% 16px, 28% 4px,
+    32% 20px, 36% 10px, 40% 24px, 44% 6px, 48% 18px, 52% 8px, 56% 22px, 60% 12px,
+    64% 6px, 68% 20px, 72% 10px, 76% 24px, 80% 8px, 84% 16px, 88% 6px, 92% 20px,
+    96% 12px, 100% 8px,
+    100% calc(100% - 14px), 96% calc(100% - 6px), 92% calc(100% - 20px),
+    88% calc(100% - 8px), 84% calc(100% - 24px), 80% calc(100% - 10px),
+    76% calc(100% - 18px), 72% calc(100% - 6px), 68% calc(100% - 22px),
+    64% calc(100% - 12px), 60% calc(100% - 8px), 56% calc(100% - 20px),
+    52% calc(100% - 6px), 48% calc(100% - 16px), 44% calc(100% - 10px),
+    40% calc(100% - 24px), 36% calc(100% - 8px), 32% calc(100% - 18px),
+    28% calc(100% - 6px), 24% calc(100% - 22px), 20% calc(100% - 12px),
+    16% calc(100% - 8px), 12% calc(100% - 20px), 8% calc(100% - 6px),
+    4% calc(100% - 16px), 0% calc(100% - 10px)
   );
+}
+
+/* Halftone dot circle behind the product photos (reference look) */
+.dots {
+  background-image: radial-gradient(rgba(13, 156, 77, 0.16) 1.5px, transparent 1.6px);
+  background-size: 16px 16px;
 }
 
 /* Gentle float for hero leaves */

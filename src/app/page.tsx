@@ -2,16 +2,32 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { faqs, formula, hero, ingredients, intro, marquee, order, reviews, site, variants } from "@/data/site";
+import { faqs, formula, hero, ingredients, intro, order, reviews, site, variants } from "@/data/site";
 
 const fade = "transition-all duration-300 ease-out";
-/* Round 8 — full rebuild as a same-to-same clone of the user's reference
-   landing page (green #0D9C4D + gold #F9A430 + black + white, sampled
-   from the reference image). Design, layout and sections follow the
-   reference; the products, photos and copy are Baaric's own — the
-   reference's protein copy and prices are NOT copied (no prices were
-   supplied for Baaric). Pill buttons, circular images, green arch hero,
-   torn-edge green bands. Wood theme dropped entirely. */
+/* Round 9 — faithful rebuild of the reference landing page (user's
+   correction of Round 8: "trash", not natural, not same-to-same).
+   What changed vs Round 8:
+   - Heavy sans display type (Noto Sans Bengali 800/900), headline all
+     black like the reference — no more serif.
+   - Hero: REAL transparent bottle cutouts (PIL, from the user's own
+     singles) standing on the green arch — no photo rectangle. Flower
+     circle left, coconut-half bowl circle right, big leaves at the
+     top corners, soft shadow under the bottles.
+   - Header: no gold pill — cart (qty badge) + search + green circle
+     menu button, like the reference.
+   - Trust strip: STATIC wordmark row with gold side-lines, no marquee.
+   - Green band: gold line icons (no circles), irregular torn edges,
+     coconut-half bowl circle.
+   - Products: halftone dot circle behind the photo + leaf sprig,
+     spec line + longer honest paragraph (label + use).
+   - Ingredients: white, left-aligned, gold icons.
+   - Formula: text left, circle right. Packages: white + gold top strip.
+   - Reviews: BLACK section with dark cards (reference testimonials).
+   - Footer: black, 3 columns.
+   Design/layout follow the reference; products, photos and copy are
+   Baaric's own — the reference's protein copy and prices are NOT
+   copied (no prices were supplied for Baaric). */
 
 /* Simple leaf shape (reference has small leaves around the hero) */
 const Leaf = ({ className }: { className?: string }) => (
@@ -26,6 +42,30 @@ const featureIcons = [
   <path key="drop" d="M12 2.7s6.5 7 6.5 11.3a6.5 6.5 0 1 1-13 0C5.5 9.7 12 2.7 12 2.7Z" />,
   <path key="star" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />,
 ];
+
+const SearchIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
+    <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
+    <path d="M21 21l-4.3-4.3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
+
+const CartIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
+    <path d="M3 3h2l2.4 12.4A2 2 0 0 0 9.4 17h7.9a2 2 0 0 0 2-1.6L21 7H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="10" cy="21" r="1.6" fill="currentColor" />
+    <circle cx="18" cy="21" r="1.6" fill="currentColor" />
+  </svg>
+);
+
+const GridIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
+    <rect x="4" y="4" width="7" height="7" rx="1.5" />
+    <rect x="13" y="4" width="7" height="7" rx="1.5" />
+    <rect x="4" y="13" width="7" height="7" rx="1.5" />
+    <rect x="13" y="13" width="7" height="7" rx="1.5" />
+  </svg>
+);
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -150,19 +190,26 @@ export default function Home() {
     { title: "তিনটি তেল, একসাথে", text: "ম্যাসাজ, হেয়ার আর কোকোনাট — একসাথে যত্ন।" },
   ];
 
+  const heroCutouts = [
+    { src: "/baaric-cut-massage.png", alt: "বেবি ম্যাসাজ অয়েল — ৫০ মিলি বোতল", w: 522, h: 1007, cls: "h-[170px] sm:h-[210px] md:h-[260px]" },
+    { src: "/baaric-cut-coconut.png", alt: "অর্গানিক কোকোনাট অয়েল — ২০০ মিলি বোতল", w: 689, h: 1288, cls: "h-[230px] sm:h-[280px] md:h-[350px]" },
+    { src: "/baaric-cut-hair.png", alt: "বেবি হেয়ার অয়েল — ১৫০ মিলি বোতল", w: 793, h: 1260, cls: "h-[200px] sm:h-[250px] md:h-[310px]" },
+  ];
+
   return (
     <main className="min-h-screen bg-white">
-      {/* ── Header: white, logo left, nav centre, gold pill button right ── */}
+      {/* ── Header: white, logo left, nav centre, icons right
+           (cart with qty badge, search, green circle menu) ── */}
       <header className="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5 md:px-8">
           <a href="#" className="flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green text-white">
               <Leaf className="h-5 w-5" />
             </span>
-            <span className="font-display text-[26px] font-bold leading-none tracking-tight text-ink">
+            <span className="font-display text-[26px] font-extrabold leading-none tracking-tight text-ink">
               Baaric
             </span>
-            <span className="font-display text-[15px] text-green">বারিক</span>
+            <span className="font-display text-[15px] font-bold text-green">বারিক</span>
           </a>
           <nav className="hidden items-center gap-7 text-[15px] font-medium text-ink-soft lg:flex">
             {navLinks.map(([href, label]) => (
@@ -171,25 +218,36 @@ export default function Home() {
               </a>
             ))}
           </nav>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
+            <a
+              href="#products"
+              aria-label="পণ্য খুঁজুন"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-ink transition hover:bg-green-pale hover:text-green-deep"
+            >
+              <SearchIcon className="h-5 w-5" />
+            </a>
             <a
               href="#order"
-              className={`${fade} rounded-full bg-gold px-5 py-2.5 text-[15px] font-bold text-ink shadow-[0_8px_16px_-8px_rgb(249_164_48/0.8)] hover:-translate-y-0.5 hover:bg-gold-deep hover:text-white active:scale-95`}
+              aria-label="অর্ডার দেখুন"
+              className="relative flex h-10 w-10 items-center justify-center rounded-full text-ink transition hover:bg-green-pale hover:text-green-deep"
             >
-              অর্ডার করুন
+              <CartIcon className="h-5 w-5" />
+              <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-[11px] font-bold text-ink">
+                {qty.toLocaleString("bn-BD")}
+              </span>
             </a>
             <button
               type="button"
               aria-label="মেনু"
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((v) => !v)}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-white text-ink lg:hidden"
+              className="ml-1 flex h-10 w-10 items-center justify-center rounded-full bg-green text-white transition hover:bg-green-deep"
             >
-              <span className="text-[18px] leading-none">{menuOpen ? "✕" : "☰"}</span>
+              <GridIcon className="h-5 w-5" />
             </button>
           </div>
         </div>
-        <div className={`faq-panel ${menuOpen ? "open" : ""} border-t border-line/60 bg-white lg:hidden`}>
+        <div className={`faq-panel ${menuOpen ? "open" : ""} border-t border-line/60 bg-white`}>
           <div>
             <nav className="flex flex-col px-5 py-2 text-[16px] font-medium text-ink-soft">
               {navLinks.map(([href, label]) => (
@@ -202,20 +260,30 @@ export default function Home() {
                   {label}
                 </a>
               ))}
+              <a
+                href="#order"
+                onClick={() => setMenuOpen(false)}
+                className="rounded-full px-3 py-3 font-bold text-green-deep transition-colors hover:bg-green-pale"
+              >
+                অর্ডার করুন
+              </a>
             </nav>
           </div>
         </div>
       </header>
 
-      {/* ── Hero: white, big centred headline, gold pill button,
-           green arch behind the 3-bottle photo, floating leaves. ── */}
-      <section className="overflow-hidden bg-white pt-12 md:pt-16">
+      {/* ── Hero: white, big heavy headline, gold pill button,
+           real bottle cutouts standing on the green arch, big leaves
+           at the top corners, flower + coconut bowl at the arch base. ── */}
+      <section className="relative overflow-hidden bg-white pt-12 md:pt-16">
+        <Leaf className="animate-float absolute -left-3 top-8 z-0 h-14 w-14 -rotate-[30deg] text-green md:h-20 md:w-20" />
+        <Leaf className="animate-float-slow absolute -right-3 top-12 z-0 h-12 w-12 rotate-[25deg] text-green md:h-16 md:w-16" />
         <div className="relative z-10 mx-auto max-w-6xl px-5 text-center md:px-8">
           <p className="hero-in text-[12px] font-bold uppercase tracking-[0.24em] text-gold-deep sm:text-[13px]">
             {hero.eyebrow}
           </p>
-          <h1 className="hero-in-delay mx-auto mt-3 max-w-3xl font-display text-[38px] font-bold leading-[1.15] text-ink sm:text-[56px] md:text-[68px]">
-            {hero.titleA} <span className="text-green">{hero.highlight}</span>
+          <h1 className="hero-in-delay mx-auto mt-3 max-w-3xl font-display text-[38px] font-black leading-[1.15] text-ink sm:text-[56px] md:text-[68px]">
+            {hero.titleA} {hero.highlight}
           </h1>
           <p className="hero-in-delay2 mx-auto mt-4 max-w-xl text-[16px] leading-relaxed text-ink-soft md:text-[17px]">
             {hero.subtext}
@@ -229,56 +297,68 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <div className="relative mx-auto mt-12 max-w-4xl px-5 md:mt-14">
+        <div className="relative mx-auto mt-10 max-w-3xl md:mt-12">
           <div aria-hidden className="absolute bottom-0 left-1/2 aspect-[1.5/1] w-[min(560px,125%)] -translate-x-1/2 rounded-t-full bg-green md:aspect-[1.7/1] md:w-[min(860px,112%)]" />
-          <Leaf className="animate-float absolute left-[4%] top-[16%] z-20 h-8 w-8 text-green-deep md:h-10 md:w-10" />
-          <Leaf className="animate-float-slow absolute right-[3%] top-[30%] z-20 h-7 w-7 rotate-[30deg] text-gold md:h-9 md:w-9" />
-          <Leaf className="animate-float absolute right-[10%] top-[4%] z-20 hidden h-6 w-6 rotate-[-20deg] text-green-deep md:block" />
-          <Image
-            src="/baaric-hero-product.jpg"
-            alt="Baaric বেবি অয়েল — ম্যাসাজ অয়েল, কোকোনাট অয়েল ও হেয়ার অয়েল"
-            width={1720}
-            height={1280}
-            priority
-            className="relative z-10 mx-auto h-auto w-[min(620px,90%)]"
-          />
-        </div>
-      </section>
-
-      {/* ── Trust strip: small label + marquee of the oils' qualities ── */}
-      <div className="border-y border-line bg-white py-5">
-        <p className="text-center text-[11px] font-bold uppercase tracking-[0.24em] text-ink-faint">
-          আমাদের তেলের বৈশিষ্ট্য
-        </p>
-        <div className="mt-3 overflow-hidden" aria-hidden>
-          <div className="marquee-track flex w-max items-center gap-8 whitespace-nowrap text-[15px] font-semibold text-ink-soft">
-            {[...marquee, ...marquee, ...marquee, ...marquee].map((w, i) => (
-              <span key={i} className="flex items-center gap-8">
-                {w} <span className="text-green">✦</span>
-              </span>
+          <div aria-hidden className="absolute bottom-1 left-1/2 z-10 h-5 w-3/4 -translate-x-1/2 rounded-full bg-black/20 blur-xl" />
+          <div className="absolute bottom-[4%] left-[1%] z-20 h-14 w-14 overflow-hidden rounded-full ring-4 ring-white/70 shadow-lg sm:h-24 sm:w-24 md:h-32 md:w-32">
+            <Image src="/baaric-flower.jpg" alt="" width={280} height={280} className="h-full w-full object-cover" />
+          </div>
+          <div className="absolute bottom-[2%] right-[1%] z-20 h-14 w-14 overflow-hidden rounded-full ring-4 ring-white/70 shadow-lg sm:h-24 sm:w-24 md:h-32 md:w-32">
+            <Image src="/baaric-bowl.jpg" alt="" width={420} height={420} className="h-full w-full object-cover" />
+          </div>
+          <div className="relative z-10 flex items-end justify-center gap-1 sm:gap-3 md:gap-5">
+            {heroCutouts.map((c, i) => (
+              <Image
+                key={c.src}
+                src={c.src}
+                alt={c.alt}
+                width={c.w}
+                height={c.h}
+                priority={i === 1}
+                className={`${c.cls} w-auto drop-shadow-[0_18px_16px_rgb(0_0_0/0.25)]`}
+              />
             ))}
           </div>
         </div>
+      </section>
+
+      {/* ── Trust strip: gold-lined label + STATIC wordmark row ── */}
+      <div className="border-y border-line bg-white py-6">
+        <div className="flex items-center justify-center gap-4 px-5">
+          <span className="h-px w-12 bg-gold sm:w-20" />
+          <p className="text-center text-[11px] font-bold uppercase tracking-[0.24em] text-ink-faint">
+            আমাদের তেলের বৈশিষ্ট্য
+          </p>
+          <span className="h-px w-12 bg-gold sm:w-20" />
+        </div>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 px-5 text-ink-faint">
+          <span className="font-display text-[24px] font-black lowercase italic">maate</span>
+          <span className="font-display text-[22px] font-extrabold text-ink">Baaric</span>
+          <span className="text-[18px] font-bold">কোল্ড-প্রেসড</span>
+          <span className="text-[18px] font-semibold">প্রাকৃতিক</span>
+          <span className="text-[18px] font-medium tracking-wide">অর্গানিক</span>
+        </div>
       </div>
 
-      {/* ── Green band: 4 features + circular product photo, torn edges ── */}
+      {/* ── Green band: 4 features (gold icons) + coconut bowl circle,
+           irregular torn edges ── */}
       <section id="features" className="torn scroll-mt-24 bg-green py-24 md:py-28">
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 md:grid-cols-[1fr_auto] md:px-8">
           <div className="reveal">
             <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-white/80">কেন Baaric</p>
-            <h2 className="mt-3 font-display text-[30px] font-bold leading-tight text-white sm:text-[38px]">
+            <h2 className="mt-3 font-display text-[30px] font-extrabold leading-tight text-white sm:text-[38px]">
               {intro.heading}
             </h2>
             <div className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2">
               {features.map((f, i) => (
                 <div key={f.title} className="flex gap-4">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/20 text-white">
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden>
+                  <span className="flex h-8 w-8 shrink-0 items-start justify-center pt-0.5 text-gold">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7" aria-hidden>
                       {featureIcons[i]}
                     </svg>
                   </span>
                   <div>
-                    <h3 className="font-display text-[19px] font-bold text-white">{f.title}</h3>
+                    <h3 className="font-display text-[19px] font-extrabold tracking-wide text-white">{f.title}</h3>
                     <p className="mt-1 text-[14.5px] leading-relaxed text-white/85">{f.text}</p>
                   </div>
                 </div>
@@ -288,10 +368,10 @@ export default function Home() {
           <div className="reveal mx-auto">
             <div className="h-[240px] w-[240px] overflow-hidden rounded-full ring-4 ring-white/40 md:h-[280px] md:w-[280px]">
               <Image
-                src="/baaric-product-coconut-200.jpg"
-                alt="অর্গানিক কোকোনাট অয়েল — ২০০ মিলি বোতল"
-                width={900}
-                height={900}
+                src="/baaric-bowl.jpg"
+                alt="আধা নারকেল — কোকোনাট অয়েলের আসল উপাদান"
+                width={420}
+                height={420}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -299,12 +379,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Products: alternating rows, image / text ── */}
+      {/* ── Products: alternating rows, dot circle + leaf behind photo ── */}
       <section id="products" className="scroll-mt-24 bg-white py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
           <div className="reveal text-center">
             <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-green">পণ্য</p>
-            <h2 className="mt-3 font-display text-[30px] font-bold text-ink sm:text-[38px]">আমাদের পণ্য</h2>
+            <h2 className="mt-3 font-display text-[30px] font-extrabold text-ink sm:text-[38px]">আমাদের পণ্য</h2>
             <p className="mx-auto mt-3 max-w-xl text-[16px] leading-relaxed text-ink-soft">
               তিনটি তেল, তিন রকম যত্ন — বোতলের লেবেলেই সব লেখা।
             </p>
@@ -314,22 +394,26 @@ export default function Home() {
               key={v.id}
               className={`reveal grid items-center gap-8 py-12 md:grid-cols-2 md:gap-14 ${i > 0 ? "border-t border-line" : ""}`}
             >
-              <div className={i % 2 === 1 ? "md:order-2" : ""}>
+              <div className={`relative ${i % 2 === 1 ? "md:order-2" : ""}`}>
+                <div aria-hidden className="dots absolute left-1/2 top-1/2 h-[380px] w-[380px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-pale/70 md:h-[440px] md:w-[440px]" />
                 <Image
                   src={v.image}
                   alt={v.alt}
-                  width={900}
-                  height={900}
-                  className="mx-auto w-full max-w-[380px] object-contain"
+                  width={1600}
+                  height={1600}
+                  className="relative mx-auto w-full max-w-[320px] object-contain md:max-w-[360px]"
                 />
+                <Leaf className="absolute bottom-8 right-[10%] h-8 w-8 rotate-[20deg] text-green" />
               </div>
               <div className={i % 2 === 1 ? "md:order-1" : ""}>
                 <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-green">{v.variant}</p>
-                <h3 className="mt-2 font-display text-[30px] font-bold leading-tight text-ink sm:text-[36px]">
+                <h3 className="mt-2 font-display text-[30px] font-extrabold leading-tight text-ink sm:text-[36px]">
                   {v.name}
                 </h3>
-                <p className="mt-2 text-[14px] font-medium text-ink-faint">{v.labelEn}</p>
-                <p className="mt-3 max-w-md text-[16px] leading-relaxed text-ink-soft">{v.desc}</p>
+                <p className="mt-2 text-[14px] font-semibold text-ink-faint">{v.labelEn}</p>
+                <p className="mt-3 max-w-md text-[16px] leading-relaxed text-ink-soft">
+                  {v.desc} {v.use}।
+                </p>
                 <div className="mt-7 flex flex-wrap items-center gap-5">
                   <button
                     type="button"
@@ -346,24 +430,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Ingredients: 4 items from the real labels ── */}
-      <section id="ingredients" className="scroll-mt-24 bg-paper py-16 md:py-20">
-        <div className="mx-auto max-w-4xl px-5 md:px-8">
-          <div className="reveal text-center">
+      {/* ── Ingredients: white, left-aligned, gold icons ── */}
+      <section id="ingredients" className="scroll-mt-24 bg-white py-16 md:py-20">
+        <div className="mx-auto max-w-5xl px-5 md:px-8">
+          <div className="reveal">
             <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-green">উপাদান</p>
-            <h2 className="mt-3 font-display text-[30px] font-bold text-ink sm:text-[38px]">উপাদান</h2>
-            <p className="mx-auto mt-3 max-w-xl text-[16px] leading-relaxed text-ink-soft">
+            <h2 className="mt-3 font-display text-[30px] font-extrabold text-ink sm:text-[38px]">উপাদান</h2>
+            <p className="mt-3 max-w-xl text-[16px] leading-relaxed text-ink-soft">
               বোতলের লেবেলে যা লেখা, ভেতরে তাই।
             </p>
           </div>
           <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
-            {ingredients.map((g) => (
+            {ingredients.map((g, i) => (
               <div key={g.name} className="reveal flex gap-4">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green text-white">
-                  <Leaf className="h-6 w-6" />
+                <span className="flex h-8 w-8 shrink-0 items-start justify-center pt-0.5 text-gold">
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7" aria-hidden>
+                    {featureIcons[i]}
+                  </svg>
                 </span>
                 <div>
-                  <h3 className="font-display text-[20px] font-bold text-ink">
+                  <h3 className="font-display text-[20px] font-extrabold text-ink">
                     {g.name} <span className="text-[14px] font-medium text-ink-faint">· {g.en}</span>
                   </h3>
                   <p className="mt-1 text-[15px] leading-relaxed text-ink-soft">{g.note}</p>
@@ -371,28 +457,17 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <p className="reveal mt-10 text-center text-[15px] leading-relaxed text-ink-soft">
+          <p className="reveal mt-10 text-[15px] leading-relaxed text-ink-soft">
             আর কোকোনাট অয়েল — <strong className="text-ink">এক্সট্রা-ভার্জিন কোল্ড-প্রেসড</strong>।
           </p>
         </div>
       </section>
 
-      {/* ── Formula band: green, circular photo + short text ── */}
+      {/* ── Formula band: green, text left, circular photo right ── */}
       <section className="bg-green py-16 md:py-20">
-        <div className="mx-auto grid max-w-5xl items-center gap-10 px-5 md:grid-cols-[auto_1fr] md:px-8">
-          <div className="reveal mx-auto">
-            <div className="h-[220px] w-[220px] overflow-hidden rounded-full ring-4 ring-white/40 md:h-[260px] md:w-[260px]">
-              <Image
-                src="/baaric-details-products.jpg"
-                alt="Baaric-এর তিনটি তেল — বেবি ম্যাসাজ অয়েল, অর্গানিক কোকোনাট অয়েল ও বেবি হেয়ার অয়েল"
-                width={1200}
-                height={892}
-                className="h-full w-full object-cover"
-              />
-            </div>
-          </div>
+        <div className="mx-auto grid max-w-5xl items-center gap-10 px-5 md:grid-cols-[1fr_auto] md:px-8">
           <div className="reveal text-center md:text-left">
-            <h2 className="font-display text-[30px] font-bold text-white sm:text-[36px]">{formula.heading}</h2>
+            <h2 className="font-display text-[30px] font-extrabold text-white sm:text-[36px]">{formula.heading}</h2>
             <p className="mx-auto mt-3 max-w-lg text-[16px] leading-relaxed text-white/85 md:mx-0">
               {formula.text}
             </p>
@@ -403,15 +478,26 @@ export default function Home() {
               অর্ডার করুন
             </a>
           </div>
+          <div className="reveal mx-auto">
+            <div className="h-[220px] w-[220px] overflow-hidden rounded-full ring-4 ring-white/40 md:h-[260px] md:w-[260px]">
+              <Image
+                src="/baaric-details-products.jpg"
+                alt="Baaric-এর তিনটি তেল — বেবি ম্যাসাজ অয়েল, অর্গানিক কোকোনাট অয়েল ও বেবি হেয়ার অয়েল"
+                width={1808}
+                height={1344}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── Packages: 3 cards, click to select + go to order ── */}
-      <section id="packages" className="scroll-mt-24 bg-paper py-16 md:py-20">
+      {/* ── Packages: white, gold top strip, click to select + order ── */}
+      <section id="packages" className="scroll-mt-24 bg-white py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
           <div className="reveal text-center">
             <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-green">প্যাকেজ</p>
-            <h2 className="mt-3 font-display text-[30px] font-bold text-ink sm:text-[38px]">প্যাকেজ</h2>
+            <h2 className="mt-3 font-display text-[30px] font-extrabold text-ink sm:text-[38px]">প্যাকেজ</h2>
             <p className="mx-auto mt-3 max-w-xl text-[16px] leading-relaxed text-ink-soft">
               তিনটি প্যাক — যেটা দরকার, সেটা বেছে নিন।
             </p>
@@ -426,6 +512,7 @@ export default function Home() {
                     active ? "border-green shadow-[0_24px_44px_-22px_rgb(13_156_77/0.5)]" : "border-line"
                   }`}
                 >
+                  <div aria-hidden className="-mx-6 -mt-6 h-2 rounded-t-2xl bg-gold" />
                   {active && (
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-green px-3.5 py-1 text-[12px] font-bold text-white">
                       নির্বাচিত
@@ -434,11 +521,11 @@ export default function Home() {
                   <Image
                     src={v.image}
                     alt={v.alt}
-                    width={900}
-                    height={900}
+                    width={1600}
+                    height={1600}
                     className="mx-auto h-52 w-auto object-contain"
                   />
-                  <h3 className="mt-4 font-display text-[20px] font-bold text-ink">{v.name}</h3>
+                  <h3 className="mt-4 font-display text-[20px] font-extrabold text-ink">{v.name}</h3>
                   <p className="mt-1 text-[14px] text-ink-faint">
                     {v.variant} · {v.sizeBn}
                   </p>
@@ -457,15 +544,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Reviews: ONE row, auto-sliding ── */}
-      <section id="reviews" className="scroll-mt-24 bg-white py-16 md:py-20">
+      {/* ── Reviews: BLACK section, dark cards (reference testimonials) ── */}
+      <section id="reviews" className="scroll-mt-24 bg-ink py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
           <div className="reveal flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-green">{reviews.eyebrow}</p>
-              <h2 className="mt-3 font-display text-[30px] font-bold text-ink sm:text-[38px]">{reviews.heading}</h2>
+              <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-gold">{reviews.eyebrow}</p>
+              <h2 className="mt-3 font-display text-[30px] font-extrabold text-white sm:text-[38px]">{reviews.heading}</h2>
               {reviews.sample && (
-                <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-green-soft px-3 py-1.5 text-[12px] font-bold text-green-deep">
+                <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[12px] font-bold text-gold">
                   নমুনা রিভিউ — আসল ক্রেতার কথা এলে এখানে বসবে
                 </p>
               )}
@@ -475,7 +562,7 @@ export default function Home() {
                 type="button"
                 onClick={revPrev}
                 aria-label="আগের রিভিউ"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-[18px] text-ink transition hover:border-green hover:text-green-deep"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-transparent text-[18px] text-white transition hover:border-gold hover:text-gold"
               >
                 ‹
               </button>
@@ -483,7 +570,7 @@ export default function Home() {
                 type="button"
                 onClick={revNext}
                 aria-label="পরের রিভিউ"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-[18px] text-ink transition hover:border-green hover:text-green-deep"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-transparent text-[18px] text-white transition hover:border-gold hover:text-gold"
               >
                 ›
               </button>
@@ -506,12 +593,12 @@ export default function Home() {
               {[...reviews.items, ...reviews.items].map((r, i) => (
                 <article
                   key={i}
-                  className="w-[86%] shrink-0 rounded-2xl border border-line bg-white p-6 shadow-[0_18px_36px_-26px_rgb(10_10_10/0.3)] sm:w-[47%] lg:w-[31.5%]"
+                  className="w-[86%] shrink-0 rounded-2xl border border-white/10 bg-white/[0.06] p-6 sm:w-[47%] lg:w-[31.5%]"
                 >
                   <p className="text-[17px] tracking-[0.2em] text-gold">★★★★★</p>
-                  <p className="mt-3 text-[16px] leading-relaxed text-ink-soft">“{r.quote}”</p>
-                  <p className="mt-5 font-display text-[16px] font-bold text-ink">{r.name}</p>
-                  <p className="text-[13px] text-ink-faint">{r.role}</p>
+                  <p className="mt-3 text-[16px] leading-relaxed text-white/85">“{r.quote}”</p>
+                  <p className="mt-5 font-display text-[16px] font-bold text-white">{r.name}</p>
+                  <p className="text-[13px] text-white/50">{r.role}</p>
                 </article>
               ))}
             </div>
@@ -520,10 +607,10 @@ export default function Home() {
       </section>
 
       {/* ── FAQ: plain and centered — just the questions. ── */}
-      <section id="faq" className="scroll-mt-24 bg-paper py-16 md:py-20">
+      <section id="faq" className="scroll-mt-24 bg-white py-16 md:py-20">
         <div className="mx-auto max-w-3xl px-5 md:px-8">
           <div className="reveal text-center">
-            <h2 className="font-display text-[30px] font-bold text-ink sm:text-[38px]">সচরাচর জিজ্ঞাসা</h2>
+            <h2 className="font-display text-[30px] font-extrabold text-ink sm:text-[38px]">সচরাচর জিজ্ঞাসা</h2>
           </div>
           <div className="reveal mt-8">
             {faqs.map((f, i) => {
@@ -563,7 +650,7 @@ export default function Home() {
               {done ? (
                 <div className="flex h-full flex-col items-start justify-center py-4 text-left">
                   <span className="flex h-14 w-14 items-center justify-center rounded-full bg-green text-[26px] text-white">✓</span>
-                  <h3 className="mt-5 font-display text-[26px] font-bold text-ink">{order.successTitle}</h3>
+                  <h3 className="mt-5 font-display text-[26px] font-extrabold text-ink">{order.successTitle}</h3>
                   <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">{order.successText}</p>
                   <p className="mt-5 w-full rounded-2xl bg-green-pale px-5 py-4 text-[15px] leading-relaxed text-ink">
                     অর্ডার আইডি: <strong>{orderId}</strong>
@@ -645,7 +732,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col justify-center bg-green px-7 py-10 sm:px-9">
               <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-gold-soft">{order.eyebrow}</p>
-              <h2 className="mt-2 font-display text-[28px] font-bold leading-snug text-white sm:text-[32px]">
+              <h2 className="mt-2 font-display text-[28px] font-extrabold leading-snug text-white sm:text-[32px]">
                 {order.heading}
               </h2>
               <p className="mt-2 text-[15px] leading-relaxed text-white/85">{order.subtext}</p>
@@ -697,12 +784,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Footer: black, like the reference ── */}
+      {/* ── Footer: black, 3 columns ── */}
       <footer className="bg-ink py-12 text-white">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+          <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
             <div>
-              <p className="flex items-center gap-2 font-display text-[28px] font-bold leading-none">
+              <p className="flex items-center gap-2 font-display text-[28px] font-extrabold leading-none">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green text-white">
                   <Leaf className="h-4 w-4" />
                 </span>
@@ -721,6 +808,16 @@ export default function Home() {
                 অর্ডার করুন
               </a>
             </nav>
+            <div>
+              <p className="font-display text-[16px] font-bold text-white">যোগাযোগ</p>
+              <p className="mt-2 max-w-[220px] text-[14px] leading-relaxed text-white/60">{site.contactNote}</p>
+              <a
+                href="#order"
+                className={`${fade} mt-4 inline-block rounded-full bg-gold px-6 py-2.5 text-[14px] font-bold text-ink hover:bg-gold-deep hover:text-white`}
+              >
+                অর্ডার করুন
+              </a>
+            </div>
           </div>
           <div className="mt-10 border-t border-white/10 pt-6 text-[13px] text-white/40">
             © ২০২৬ Baaric · All rights reserved. Developed by{" "}
