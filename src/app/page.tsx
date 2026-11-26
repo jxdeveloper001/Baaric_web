@@ -2,12 +2,30 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { faqs, hero, intro, marquee, order, reviews, site, variants } from "@/data/site";
+import { faqs, formula, hero, ingredients, intro, marquee, order, reviews, site, variants } from "@/data/site";
 
 const fade = "transition-all duration-300 ease-out";
-/* Round 5 — the whole site is SQUARE with just a touch of softness:
-   cards rounded-lg, buttons/inputs rounded-md. Nothing pill, nothing
-   fully round. Softness comes from shadows + blurred colour washes. */
+/* Round 8 — full rebuild as a same-to-same clone of the user's reference
+   landing page (green #0D9C4D + gold #F9A430 + black + white, sampled
+   from the reference image). Design, layout and sections follow the
+   reference; the products, photos and copy are Baaric's own — the
+   reference's protein copy and prices are NOT copied (no prices were
+   supplied for Baaric). Pill buttons, circular images, green arch hero,
+   torn-edge green bands. Wood theme dropped entirely. */
+
+/* Simple leaf shape (reference has small leaves around the hero) */
+const Leaf = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
+    <path d="M20.5 3.5C11 3.5 4.5 9 3.5 19.5c-.1 1 .7 2 1.8 1.9C16 20.5 20.5 13.5 20.5 3.5Z" />
+  </svg>
+);
+
+const featureIcons = [
+  <path key="heart" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />,
+  <path key="leaf" d="M20.5 3.5C11 3.5 4.5 9 3.5 19.5c-.1 1 .7 2 1.8 1.9C16 20.5 20.5 13.5 20.5 3.5Z" />,
+  <path key="drop" d="M12 2.7s6.5 7 6.5 11.3a6.5 6.5 0 1 1-13 0C5.5 9.7 12 2.7 12 2.7Z" />,
+  <path key="star" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />,
+];
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,6 +39,11 @@ export default function Home() {
   const [orderId, setOrderId] = useState("");
 
   const selected = variants.find((v) => v.id === variantId) ?? variants[0];
+
+  const pick = (id: string) => {
+    setVariantId(id);
+    document.getElementById("order")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   // ── Reviews slider: one row, auto-advances, infinite.
   //    The list is rendered twice; the position snaps back to 0
@@ -114,26 +137,36 @@ export default function Home() {
   }
 
   const navLinks: Array<[string, string]> = [
-    ["#intro", "পরিচিতি"],
-    ["#variants", "পণ্য"],
+    ["#features", "বৈশিষ্ট্য"],
+    ["#products", "পণ্য"],
+    ["#ingredients", "উপাদান"],
+    ["#packages", "প্যাকেজ"],
     ["#reviews", "রিভিউ"],
     ["#faq", "জিজ্ঞাসা"],
   ];
 
+  const features = [
+    ...intro.points,
+    { title: "তিনটি তেল, একসাথে", text: "ম্যাসাজ, হেয়ার আর কোকোনাট — একসাথে যত্ন।" },
+  ];
+
   return (
-    <main className="min-h-screen">
-      {/* ── Header: cream, thin gold rule under it ── */}
-      <header className="sticky top-0 z-40 border-b-2 border-gold/60 bg-cream/95 backdrop-blur-md">
+    <main className="min-h-screen bg-white">
+      {/* ── Header: white, logo left, nav centre, gold pill button right ── */}
+      <header className="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5 md:px-8">
-          <a href="#" className="flex items-baseline gap-2">
-            <span className="font-display text-[26px] font-bold leading-none tracking-tight text-leaf">
+          <a href="#" className="flex items-center gap-2">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green text-white">
+              <Leaf className="h-5 w-5" />
+            </span>
+            <span className="font-display text-[26px] font-bold leading-none tracking-tight text-ink">
               Baaric
             </span>
-            <span className="font-display text-[15px] text-terra-deep">বারিক</span>
+            <span className="font-display text-[15px] text-green">বারিক</span>
           </a>
-          <nav className="hidden items-center gap-8 text-[15px] font-medium text-cocoa-soft lg:flex">
+          <nav className="hidden items-center gap-7 text-[15px] font-medium text-ink-soft lg:flex">
             {navLinks.map(([href, label]) => (
-              <a key={href} href={href} className={`${fade} hover:text-terra-deep`}>
+              <a key={href} href={href} className={`${fade} hover:text-green`}>
                 {label}
               </a>
             ))}
@@ -141,7 +174,7 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <a
               href="#order"
-              className={`${fade} rounded-md bg-gold px-5 py-2.5 text-[15px] font-bold text-cocoa shadow-[0_8px_16px_-8px_rgb(185_127_31/0.7)] hover:-translate-y-0.5 hover:bg-terra-deep hover:text-white active:scale-95`}
+              className={`${fade} rounded-full bg-gold px-5 py-2.5 text-[15px] font-bold text-ink shadow-[0_8px_16px_-8px_rgb(249_164_48/0.8)] hover:-translate-y-0.5 hover:bg-gold-deep hover:text-white active:scale-95`}
             >
               অর্ডার করুন
             </a>
@@ -150,21 +183,21 @@ export default function Home() {
               aria-label="মেনু"
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((v) => !v)}
-              className="flex h-10 w-10 items-center justify-center rounded-md border border-line bg-cream text-cocoa lg:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-white text-ink lg:hidden"
             >
               <span className="text-[18px] leading-none">{menuOpen ? "✕" : "☰"}</span>
             </button>
           </div>
         </div>
-        <div className={`faq-panel ${menuOpen ? "open" : ""} border-t border-line/60 bg-cream lg:hidden`}>
+        <div className={`faq-panel ${menuOpen ? "open" : ""} border-t border-line/60 bg-white lg:hidden`}>
           <div>
-            <nav className="flex flex-col px-5 py-2 text-[16px] font-medium text-cocoa-soft">
+            <nav className="flex flex-col px-5 py-2 text-[16px] font-medium text-ink-soft">
               {navLinks.map(([href, label]) => (
                 <a
                   key={href}
                   href={href}
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-md px-2 py-3 transition-colors hover:bg-cream-deep/60 hover:text-terra-deep"
+                  className="rounded-full px-3 py-3 transition-colors hover:bg-green-pale hover:text-green-deep"
                 >
                   {label}
                 </a>
@@ -174,255 +207,275 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ── Hero: CENTERED. The product image sits in the middle,
-           the text sits ON the image (top, over a soft cream wash),
-           the buttons sit BELOW the image. Minimal text. */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="/baaric-wood.jpg"
-            alt=""
-            fill
-            priority
-            className="object-cover opacity-80"
-          />
-          <div className="absolute inset-0 bg-cream/45" />
-        </div>
-        <div aria-hidden className="pointer-events-none absolute -left-24 top-8 h-72 w-72 bg-blur-green/45 blur-3xl" />
-        <div aria-hidden className="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 bg-blur-pink/50 blur-3xl" />
-        <div className="relative mx-auto max-w-4xl px-5 py-12 md:px-8 md:py-16">
-          <div className="relative">
-            <div aria-hidden className="absolute -left-3 -top-3 h-full w-full rounded-lg bg-gold/50" />
-            <div aria-hidden className="absolute -bottom-3 -right-3 h-full w-full rounded-lg bg-rose/40" />
-            <div className="relative overflow-hidden rounded-lg bg-white shadow-[0_30px_60px_-28px_rgb(74_46_27/0.5)]">
-              <Image
-                src="/baaric-hero-product.jpg"
-                alt="Baaric বেবি অয়েল — ম্যাসাজ অয়েল, কোকোনাট অয়েল ও হেয়ার অয়েল"
-                width={1720}
-                height={1280}
-                priority
-                className="h-auto w-full"
-              />
-              <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-cream/90 via-cream/55 to-transparent px-5 pb-20 pt-6 text-center sm:pt-8">
-                <p className="hero-in text-[12px] font-bold uppercase tracking-[0.22em] text-terra-deep sm:text-[13px]">
-                  {hero.eyebrow}
-                </p>
-                <h1 className="hero-in-delay mx-auto mt-2 max-w-2xl font-display text-[26px] font-bold leading-[1.2] text-cocoa sm:text-[40px] md:text-[46px]">
-                  {hero.titleA}{" "}
-                  <em className="not-italic text-leaf">{hero.highlight}</em>
-                </h1>
-                <p className="hero-in-delay2 mx-auto mt-2 hidden max-w-xl text-[16px] leading-relaxed text-cocoa-soft sm:block">
-                  {hero.subtext}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="hero-in-delay2 mt-7 flex flex-wrap items-center justify-center gap-3">
+      {/* ── Hero: white, big centred headline, gold pill button,
+           green arch behind the 3-bottle photo, floating leaves. ── */}
+      <section className="overflow-hidden bg-white pt-12 md:pt-16">
+        <div className="relative z-10 mx-auto max-w-6xl px-5 text-center md:px-8">
+          <p className="hero-in text-[12px] font-bold uppercase tracking-[0.24em] text-gold-deep sm:text-[13px]">
+            {hero.eyebrow}
+          </p>
+          <h1 className="hero-in-delay mx-auto mt-3 max-w-3xl font-display text-[38px] font-bold leading-[1.15] text-ink sm:text-[56px] md:text-[68px]">
+            {hero.titleA} <span className="text-green">{hero.highlight}</span>
+          </h1>
+          <p className="hero-in-delay2 mx-auto mt-4 max-w-xl text-[16px] leading-relaxed text-ink-soft md:text-[17px]">
+            {hero.subtext}
+          </p>
+          <div className="hero-in-delay2 mt-7">
             <a
               href="#order"
-              className={`${fade} rounded-md bg-gold px-8 py-3.5 text-[16px] font-bold text-cocoa shadow-[0_14px_26px_-12px_rgb(185_127_31/0.8)] hover:-translate-y-0.5 hover:bg-terra-deep hover:text-white active:scale-95`}
+              className={`${fade} inline-block rounded-full bg-gold px-9 py-3.5 text-[16px] font-bold text-ink shadow-[0_14px_26px_-12px_rgb(249_164_48/0.8)] hover:-translate-y-0.5 hover:bg-gold-deep hover:text-white active:scale-95`}
             >
               {hero.primaryCta}
             </a>
-            <a
-              href="#variants"
-              className={`${fade} rounded-md border-2 border-leaf/30 bg-white/70 px-7 py-3 text-[16px] font-bold text-leaf hover:-translate-y-0.5 hover:border-leaf active:scale-95`}
+          </div>
+        </div>
+        <div className="relative mx-auto mt-12 max-w-4xl px-5 md:mt-14">
+          <div aria-hidden className="absolute bottom-0 left-1/2 aspect-[1.5/1] w-[min(560px,125%)] -translate-x-1/2 rounded-t-full bg-green md:aspect-[1.7/1] md:w-[min(860px,112%)]" />
+          <Leaf className="animate-float absolute left-[4%] top-[16%] z-20 h-8 w-8 text-green-deep md:h-10 md:w-10" />
+          <Leaf className="animate-float-slow absolute right-[3%] top-[30%] z-20 h-7 w-7 rotate-[30deg] text-gold md:h-9 md:w-9" />
+          <Leaf className="animate-float absolute right-[10%] top-[4%] z-20 hidden h-6 w-6 rotate-[-20deg] text-green-deep md:block" />
+          <Image
+            src="/baaric-hero-product.jpg"
+            alt="Baaric বেবি অয়েল — ম্যাসাজ অয়েল, কোকোনাট অয়েল ও হেয়ার অয়েল"
+            width={1720}
+            height={1280}
+            priority
+            className="relative z-10 mx-auto h-auto w-[min(620px,90%)]"
+          />
+        </div>
+      </section>
+
+      {/* ── Trust strip: small label + marquee of the oils' qualities ── */}
+      <div className="border-y border-line bg-white py-5">
+        <p className="text-center text-[11px] font-bold uppercase tracking-[0.24em] text-ink-faint">
+          আমাদের তেলের বৈশিষ্ট্য
+        </p>
+        <div className="mt-3 overflow-hidden" aria-hidden>
+          <div className="marquee-track flex w-max items-center gap-8 whitespace-nowrap text-[15px] font-semibold text-ink-soft">
+            {[...marquee, ...marquee, ...marquee, ...marquee].map((w, i) => (
+              <span key={i} className="flex items-center gap-8">
+                {w} <span className="text-green">✦</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Green band: 4 features + circular product photo, torn edges ── */}
+      <section id="features" className="torn scroll-mt-24 bg-green py-24 md:py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 md:grid-cols-[1fr_auto] md:px-8">
+          <div className="reveal">
+            <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-white/80">কেন Baaric</p>
+            <h2 className="mt-3 font-display text-[30px] font-bold leading-tight text-white sm:text-[38px]">
+              {intro.heading}
+            </h2>
+            <div className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+              {features.map((f, i) => (
+                <div key={f.title} className="flex gap-4">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/20 text-white">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden>
+                      {featureIcons[i]}
+                    </svg>
+                  </span>
+                  <div>
+                    <h3 className="font-display text-[19px] font-bold text-white">{f.title}</h3>
+                    <p className="mt-1 text-[14.5px] leading-relaxed text-white/85">{f.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="reveal mx-auto">
+            <div className="h-[240px] w-[240px] overflow-hidden rounded-full ring-4 ring-white/40 md:h-[280px] md:w-[280px]">
+              <Image
+                src="/baaric-product-coconut-200.jpg"
+                alt="অর্গানিক কোকোনাট অয়েল — ২০০ মিলি বোতল"
+                width={900}
+                height={900}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Products: alternating rows, image / text ── */}
+      <section id="products" className="scroll-mt-24 bg-white py-16 md:py-20">
+        <div className="mx-auto max-w-6xl px-5 md:px-8">
+          <div className="reveal text-center">
+            <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-green">পণ্য</p>
+            <h2 className="mt-3 font-display text-[30px] font-bold text-ink sm:text-[38px]">আমাদের পণ্য</h2>
+            <p className="mx-auto mt-3 max-w-xl text-[16px] leading-relaxed text-ink-soft">
+              তিনটি তেল, তিন রকম যত্ন — বোতলের লেবেলেই সব লেখা।
+            </p>
+          </div>
+          {variants.map((v, i) => (
+            <article
+              key={v.id}
+              className={`reveal grid items-center gap-8 py-12 md:grid-cols-2 md:gap-14 ${i > 0 ? "border-t border-line" : ""}`}
             >
-              {hero.secondaryCta}
+              <div className={i % 2 === 1 ? "md:order-2" : ""}>
+                <Image
+                  src={v.image}
+                  alt={v.alt}
+                  width={900}
+                  height={900}
+                  className="mx-auto w-full max-w-[380px] object-contain"
+                />
+              </div>
+              <div className={i % 2 === 1 ? "md:order-1" : ""}>
+                <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-green">{v.variant}</p>
+                <h3 className="mt-2 font-display text-[30px] font-bold leading-tight text-ink sm:text-[36px]">
+                  {v.name}
+                </h3>
+                <p className="mt-2 text-[14px] font-medium text-ink-faint">{v.labelEn}</p>
+                <p className="mt-3 max-w-md text-[16px] leading-relaxed text-ink-soft">{v.desc}</p>
+                <div className="mt-7 flex flex-wrap items-center gap-5">
+                  <button
+                    type="button"
+                    onClick={() => pick(v.id)}
+                    className={`${fade} rounded-full bg-green px-8 py-3 text-[15px] font-bold text-white shadow-[0_12px_22px_-10px_rgb(13_156_77/0.7)] hover:-translate-y-0.5 hover:bg-green-deep active:scale-95`}
+                  >
+                    অর্ডার করুন
+                  </button>
+                  <span className="text-[20px] font-bold text-ink">{v.sizeBn}</span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Ingredients: 4 items from the real labels ── */}
+      <section id="ingredients" className="scroll-mt-24 bg-paper py-16 md:py-20">
+        <div className="mx-auto max-w-4xl px-5 md:px-8">
+          <div className="reveal text-center">
+            <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-green">উপাদান</p>
+            <h2 className="mt-3 font-display text-[30px] font-bold text-ink sm:text-[38px]">উপাদান</h2>
+            <p className="mx-auto mt-3 max-w-xl text-[16px] leading-relaxed text-ink-soft">
+              বোতলের লেবেলে যা লেখা, ভেতরে তাই।
+            </p>
+          </div>
+          <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
+            {ingredients.map((g) => (
+              <div key={g.name} className="reveal flex gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green text-white">
+                  <Leaf className="h-6 w-6" />
+                </span>
+                <div>
+                  <h3 className="font-display text-[20px] font-bold text-ink">
+                    {g.name} <span className="text-[14px] font-medium text-ink-faint">· {g.en}</span>
+                  </h3>
+                  <p className="mt-1 text-[15px] leading-relaxed text-ink-soft">{g.note}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="reveal mt-10 text-center text-[15px] leading-relaxed text-ink-soft">
+            আর কোকোনাট অয়েল — <strong className="text-ink">এক্সট্রা-ভার্জিন কোল্ড-প্রেসড</strong>।
+          </p>
+        </div>
+      </section>
+
+      {/* ── Formula band: green, circular photo + short text ── */}
+      <section className="bg-green py-16 md:py-20">
+        <div className="mx-auto grid max-w-5xl items-center gap-10 px-5 md:grid-cols-[auto_1fr] md:px-8">
+          <div className="reveal mx-auto">
+            <div className="h-[220px] w-[220px] overflow-hidden rounded-full ring-4 ring-white/40 md:h-[260px] md:w-[260px]">
+              <Image
+                src="/baaric-details-products.jpg"
+                alt="Baaric-এর তিনটি তেল — বেবি ম্যাসাজ অয়েল, অর্গানিক কোকোনাট অয়েল ও বেবি হেয়ার অয়েল"
+                width={1200}
+                height={892}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+          <div className="reveal text-center md:text-left">
+            <h2 className="font-display text-[30px] font-bold text-white sm:text-[36px]">{formula.heading}</h2>
+            <p className="mx-auto mt-3 max-w-lg text-[16px] leading-relaxed text-white/85 md:mx-0">
+              {formula.text}
+            </p>
+            <a
+              href="#order"
+              className={`${fade} mt-7 inline-block rounded-full bg-gold px-8 py-3 text-[15px] font-bold text-ink shadow-[0_12px_22px_-10px_rgb(0_0_0/0.35)] hover:-translate-y-0.5 hover:bg-gold-deep hover:text-white active:scale-95`}
+            >
+              অর্ডার করুন
             </a>
           </div>
         </div>
       </section>
 
-      {/* ── Marquee strip: gold band, cocoa text ── */}
-      <div className="overflow-hidden bg-gold py-3.5" aria-hidden>
-        <div className="marquee-track flex w-max items-center gap-8 whitespace-nowrap text-[15px] font-bold text-cocoa">
-          {[...marquee, ...marquee, ...marquee, ...marquee].map((w, i) => (
-            <span key={i} className="flex items-center gap-8">
-              {w} <span className="text-rose">✦</span>
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Product details: photo on top, no border;
-           three square tinted cards below, one row. */}
-      <section id="intro" className="scroll-mt-24 bg-white py-16 md:py-20">
+      {/* ── Packages: 3 cards, click to select + go to order ── */}
+      <section id="packages" className="scroll-mt-24 bg-paper py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <div className="reveal max-w-2xl">
-            <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">{intro.eyebrow}</p>
-            <h2 className="mt-3 font-display text-[30px] font-bold text-cocoa sm:text-[38px]">
-              {intro.heading}
-            </h2>
-            <div className="mt-4 h-1 w-16 bg-gold" />
+          <div className="reveal text-center">
+            <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-green">প্যাকেজ</p>
+            <h2 className="mt-3 font-display text-[30px] font-bold text-ink sm:text-[38px]">প্যাকেজ</h2>
+            <p className="mx-auto mt-3 max-w-xl text-[16px] leading-relaxed text-ink-soft">
+              তিনটি প্যাক — যেটা দরকার, সেটা বেছে নিন।
+            </p>
           </div>
-          <div className="reveal mx-auto mt-10 max-w-3xl">
-            <Image
-              src="/baaric-details-products.jpg"
-              alt="Baaric-এর তিনটি তেল — বেবি ম্যাসাজ অয়েল, অর্গানিক কোকোনাট অয়েল ও বেবি হেয়ার অয়েল"
-              width={1200}
-              height={892}
-              className="h-auto w-full"
-            />
-          </div>
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            {intro.points.map((pt, i) => (
-              <article
-                key={pt.title}
-                className={`reveal rounded-lg p-7 shadow-[0_20px_40px_-26px_rgb(74_46_27/0.45)] ${
-                  ["bg-leaf-soft", "bg-rose-soft", "bg-goldsoft"][i]
-                }`}
-              >
-                <p className="font-display text-[26px] font-bold text-terra-deep">{["০১", "০২", "০৩"][i]}</p>
-                <h3 className="mt-1 font-display text-[21px] font-bold text-cocoa">{pt.title}</h3>
-                <p className="mt-1.5 text-[15px] leading-relaxed text-cocoa-soft">{pt.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Product selection: SPLIT card (new shape).
-           Left: selected product on a wood-cream panel.
-           Right: title, square option boxes, qty, checks, gold CTA. */}
-      <section id="variants" className="relative scroll-mt-24 overflow-hidden bg-sage py-20">
-        <div aria-hidden className="pointer-events-none absolute -left-20 top-10 h-72 w-72 bg-blur-green/40 blur-3xl" />
-        <div aria-hidden className="pointer-events-none absolute -right-16 bottom-6 h-64 w-64 bg-blur-pink/45 blur-3xl" />
-        <div className="relative mx-auto max-w-6xl px-5 md:px-8">
-          <div className="reveal max-w-2xl">
-            <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">প্যাক</p>
-            <h2 className="mt-3 font-display text-[30px] font-bold text-cocoa sm:text-[38px]">
-              কোনটি নেবেন?
-            </h2>
-            <div className="mt-4 h-1 w-16 bg-gold" />
-          </div>
-          <div className="reveal mt-10 grid overflow-hidden rounded-lg bg-white shadow-[0_36px_70px_-32px_rgb(74_46_27/0.45)] md:grid-cols-2">
-            <div className="relative flex items-center justify-center overflow-hidden px-6 py-10">
-              <div className="absolute inset-0">
-                <Image src="/baaric-wood.jpg" alt="" fill className="object-cover opacity-70" />
-                <div className="absolute inset-0 bg-cream/55" />
-              </div>
-              <div aria-hidden className="pointer-events-none absolute left-6 top-6 h-24 w-24 bg-blur-pink/50 blur-2xl" />
-              <Image
-                key={selected.id}
-                src={selected.image}
-                alt={selected.alt}
-                width={900}
-                height={900}
-                className="anim-swap relative h-[300px] w-auto object-contain sm:h-[360px]"
-              />
-            </div>
-            <div className="px-6 py-8 sm:px-9">
-              <h3 className="font-display text-[28px] font-bold leading-tight text-cocoa sm:text-[32px]">
-                {selected.name}
-              </h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-cocoa-soft">
-                {selected.variant} · {selected.sizeBn} — {selected.desc}
-              </p>
-
-              <p className="mt-7 font-display text-[16px] font-bold text-cocoa">পণ্য নির্বাচন করুন:</p>
-              <div className="mt-3 grid grid-cols-3 gap-2.5 sm:gap-3">
-                {variants.map((v) => {
-                  const active = v.id === selected.id;
-                  return (
-                    <button
-                      key={v.id}
-                      type="button"
-                      onClick={() => setVariantId(v.id)}
-                      aria-pressed={active}
-                      className={`relative rounded-md border-2 px-3 py-3.5 text-left transition-all duration-300 sm:px-4 ${
-                        active ? "border-gold bg-goldsoft/60" : "border-line bg-white hover:border-gold/50"
-                      }`}
-                    >
-                      <span
-                        className={`absolute right-2.5 top-2.5 flex h-5 w-5 items-center justify-center rounded-sm text-[12px] text-white ${
-                          active ? "bg-gold" : "bg-cocoa/15"
-                        }`}
-                      >
-                        ✓
-                      </span>
-                      <span className="block pr-5 text-[14px] font-bold leading-snug text-cocoa sm:text-[15px]">
-                        {v.variant}
-                      </span>
-                      <span className="mt-1 block text-[13px] font-medium text-cocoa-faint">{v.sizeBn}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="mt-4 flex flex-col gap-3 rounded-md bg-cream-deep/70 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="whitespace-nowrap font-display text-[19px] font-bold text-cocoa">
-                    {qty.toLocaleString("bn-BD")}টি × {selected.sizeBn}
-                  </p>
-                  <p className="mt-0.5 text-[13px] text-cocoa-soft">দাম ও ডেলিভারি কল করে নিশ্চিত করা হবে</p>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <span className="text-[14px] font-semibold text-cocoa-soft">পরিমাণ</span>
-                  <button
-                    type="button"
-                    onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    aria-label="পরিমাণ কমান"
-                    className="flex h-9 w-9 items-center justify-center rounded-md border border-line bg-white text-[18px] text-cocoa transition hover:border-gold hover:text-terra-deep"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-5 text-center text-[17px] font-bold text-cocoa">
-                    {qty.toLocaleString("bn-BD")}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setQty((q) => Math.min(10, q + 1))}
-                    aria-label="পরিমাণ বাড়ান"
-                    className="flex h-9 w-9 items-center justify-center rounded-md border border-line bg-white text-[18px] text-cocoa transition hover:border-gold hover:text-terra-deep"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 rounded-md border border-line bg-white px-5 py-4">
-                {["আসল প্যাকেজিং", "লেবেলে লেখা উপাদান", "কোমল, প্রতিদিনের", "তিনটি তেল, একসাথে"].map((t) => (
-                  <p key={t} className="flex items-center gap-2 text-[14px] font-medium text-cocoa-soft">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-sm bg-gold text-[11px] text-white">
-                      ✓
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {variants.map((v) => {
+              const active = v.id === selected.id;
+              return (
+                <article
+                  key={v.id}
+                  className={`reveal relative rounded-2xl border-2 bg-white p-6 text-center shadow-sm transition-all duration-300 ${
+                    active ? "border-green shadow-[0_24px_44px_-22px_rgb(13_156_77/0.5)]" : "border-line"
+                  }`}
+                >
+                  {active && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-green px-3.5 py-1 text-[12px] font-bold text-white">
+                      নির্বাচিত
                     </span>
-                    {t}
+                  )}
+                  <Image
+                    src={v.image}
+                    alt={v.alt}
+                    width={900}
+                    height={900}
+                    className="mx-auto h-52 w-auto object-contain"
+                  />
+                  <h3 className="mt-4 font-display text-[20px] font-bold text-ink">{v.name}</h3>
+                  <p className="mt-1 text-[14px] text-ink-faint">
+                    {v.variant} · {v.sizeBn}
                   </p>
-                ))}
-              </div>
-
-              <a
-                href="#order"
-                className={`${fade} mt-6 block rounded-md bg-gold py-4 text-center text-[17px] font-bold text-cocoa shadow-[0_16px_28px_-12px_rgb(185_127_31/0.8)] hover:-translate-y-0.5 hover:bg-terra-deep hover:text-white active:scale-[0.98]`}
-              >
-                অর্ডার করুন — {selected.sizeBn}
-              </a>
-            </div>
+                  <button
+                    type="button"
+                    onClick={() => pick(v.id)}
+                    className={`${fade} mt-5 w-full rounded-full bg-gold py-3 text-[15px] font-bold text-ink hover:-translate-y-0.5 hover:bg-gold-deep hover:text-white active:scale-[0.98]`}
+                  >
+                    অর্ডার করুন
+                  </button>
+                  <p className="mt-3 text-[12.5px] text-ink-faint">দাম কল করে নিশ্চিত করা হবে</p>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ── Reviews: ONE row, auto-sliding (as before), square corners. ── */}
-      <section id="reviews" className="scroll-mt-24 bg-peach py-20">
+      {/* ── Reviews: ONE row, auto-sliding ── */}
+      <section id="reviews" className="scroll-mt-24 bg-white py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
           <div className="reveal flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">{reviews.eyebrow}</p>
-              <h2 className="mt-3 font-display text-[30px] font-bold text-cocoa sm:text-[38px]">{reviews.heading}</h2>
+              <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-green">{reviews.eyebrow}</p>
+              <h2 className="mt-3 font-display text-[30px] font-bold text-ink sm:text-[38px]">{reviews.heading}</h2>
               {reviews.sample && (
-                <p className="mt-3 inline-flex items-center gap-2 rounded-md bg-white px-3 py-1.5 text-[12px] font-bold text-terra-deep">
+                <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-green-soft px-3 py-1.5 text-[12px] font-bold text-green-deep">
                   নমুনা রিভিউ — আসল ক্রেতার কথা এলে এখানে বসবে
                 </p>
               )}
-              <div className="mt-4 h-1 w-16 bg-gold" />
             </div>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={revPrev}
                 aria-label="আগের রিভিউ"
-                className="flex h-11 w-11 items-center justify-center rounded-md border border-line bg-white text-[18px] text-cocoa transition hover:border-gold hover:text-terra-deep"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-[18px] text-ink transition hover:border-green hover:text-green-deep"
               >
                 ‹
               </button>
@@ -430,7 +483,7 @@ export default function Home() {
                 type="button"
                 onClick={revNext}
                 aria-label="পরের রিভিউ"
-                className="flex h-11 w-11 items-center justify-center rounded-md border border-line bg-white text-[18px] text-cocoa transition hover:border-gold hover:text-terra-deep"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-[18px] text-ink transition hover:border-green hover:text-green-deep"
               >
                 ›
               </button>
@@ -453,12 +506,12 @@ export default function Home() {
               {[...reviews.items, ...reviews.items].map((r, i) => (
                 <article
                   key={i}
-                  className="w-[86%] shrink-0 rounded-lg border border-line bg-white p-6 shadow-[0_18px_36px_-26px_rgb(74_46_27/0.4)] sm:w-[47%] lg:w-[31.5%]"
+                  className="w-[86%] shrink-0 rounded-2xl border border-line bg-white p-6 shadow-[0_18px_36px_-26px_rgb(10_10_10/0.3)] sm:w-[47%] lg:w-[31.5%]"
                 >
                   <p className="text-[17px] tracking-[0.2em] text-gold">★★★★★</p>
-                  <p className="mt-3 text-[16px] leading-relaxed text-cocoa-soft">“{r.quote}”</p>
-                  <p className="mt-5 font-display text-[16px] font-bold text-cocoa">{r.name}</p>
-                  <p className="text-[13px] text-cocoa-faint">{r.role}</p>
+                  <p className="mt-3 text-[16px] leading-relaxed text-ink-soft">“{r.quote}”</p>
+                  <p className="mt-5 font-display text-[16px] font-bold text-ink">{r.name}</p>
+                  <p className="text-[13px] text-ink-faint">{r.role}</p>
                 </article>
               ))}
             </div>
@@ -467,10 +520,10 @@ export default function Home() {
       </section>
 
       {/* ── FAQ: plain and centered — just the questions. ── */}
-      <section id="faq" className="scroll-mt-24 bg-white py-20">
+      <section id="faq" className="scroll-mt-24 bg-paper py-16 md:py-20">
         <div className="mx-auto max-w-3xl px-5 md:px-8">
           <div className="reveal text-center">
-            <h2 className="font-display text-[30px] font-bold text-cocoa sm:text-[38px]">সচরাচর জিজ্ঞাসা</h2>
+            <h2 className="font-display text-[30px] font-bold text-ink sm:text-[38px]">সচরাচর জিজ্ঞাসা</h2>
           </div>
           <div className="reveal mt-8">
             {faqs.map((f, i) => {
@@ -483,16 +536,16 @@ export default function Home() {
                     aria-expanded={open}
                     className="flex w-full items-center justify-between gap-4 py-5 text-left"
                   >
-                    <span className="font-display text-[18px] font-bold text-cocoa">{f.q}</span>
+                    <span className="font-display text-[18px] font-bold text-ink">{f.q}</span>
                     <span
-                      className={`faq-chevron ${open ? "open" : ""} flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-line bg-cream text-[18px] text-terra-deep`}
+                      className={`faq-chevron ${open ? "open" : ""} flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-green-soft text-[18px] text-green-deep`}
                     >
                       +
                     </span>
                   </button>
                   <div className={`faq-panel ${open ? "open" : ""}`}>
                     <div>
-                      <p className="pb-6 pr-10 text-[15px] leading-relaxed text-cocoa-soft">{f.a}</p>
+                      <p className="pb-6 pr-10 text-[15px] leading-relaxed text-ink-soft">{f.a}</p>
                     </div>
                   </div>
                 </div>
@@ -502,18 +555,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Order: SPLIT card — form on the left, wood panel with
-           product + summary (+ qty stepper) on the right. ── */}
-      <section id="order" className="scroll-mt-24 bg-sage py-20">
+      {/* ── Order: form on the left, green summary panel on the right. ── */}
+      <section id="order" className="scroll-mt-24 bg-green-pale py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <div className="reveal grid overflow-hidden rounded-lg bg-white shadow-[0_30px_60px_-30px_rgb(74_46_27/0.4)] md:grid-cols-[1.2fr_1fr]">
+          <div className="reveal grid overflow-hidden rounded-2xl bg-white shadow-[0_30px_60px_-30px_rgb(10_10_10/0.35)] md:grid-cols-[1.2fr_1fr]">
             <div className="px-7 py-9 sm:px-9">
               {done ? (
                 <div className="flex h-full flex-col items-start justify-center py-4 text-left">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-md bg-leaf text-[26px] text-cream">✓</span>
-                  <h3 className="mt-5 font-display text-[26px] font-bold text-cocoa">{order.successTitle}</h3>
-                  <p className="mt-2 text-[15px] leading-relaxed text-cocoa-soft">{order.successText}</p>
-                  <p className="mt-5 w-full rounded-lg bg-cream-deep/70 px-5 py-4 text-[15px] leading-relaxed text-cocoa">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-green text-[26px] text-white">✓</span>
+                  <h3 className="mt-5 font-display text-[26px] font-bold text-ink">{order.successTitle}</h3>
+                  <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">{order.successText}</p>
+                  <p className="mt-5 w-full rounded-2xl bg-green-pale px-5 py-4 text-[15px] leading-relaxed text-ink">
                     অর্ডার আইডি: <strong>{orderId}</strong>
                     <br />
                     {selected.name} · {selected.sizeBn} · {qty.toLocaleString("bn-BD")} টি
@@ -528,7 +580,7 @@ export default function Home() {
                       setPhone("");
                       setAddress("");
                     }}
-                    className={`${fade} mt-6 rounded-md border border-cocoa/25 px-6 py-3 text-[15px] font-semibold text-cocoa hover:border-gold hover:text-terra-deep`}
+                    className={`${fade} mt-6 rounded-full border border-ink/25 px-6 py-3 text-[15px] font-semibold text-ink hover:border-green hover:text-green-deep`}
                   >
                     আরেকটি অর্ডার করুন
                   </button>
@@ -537,7 +589,7 @@ export default function Home() {
                 <form onSubmit={submit} className="flex flex-col gap-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                      <label htmlFor="o-name" className="mb-1.5 block font-display text-[15px] font-bold text-cocoa">
+                      <label htmlFor="o-name" className="mb-1.5 block font-display text-[15px] font-bold text-ink">
                         আপনার নাম
                       </label>
                       <input
@@ -546,11 +598,11 @@ export default function Home() {
                         onChange={(e) => setName(e.target.value)}
                         required
                         placeholder="যেমন: আয়েশা রহমান"
-                        className="w-full rounded-md border border-line bg-white px-4 py-3.5 text-[16px] text-cocoa outline-none transition placeholder:text-cocoa-faint focus:border-gold focus:ring-2 focus:ring-gold/25"
+                        className="w-full rounded-full border border-line bg-white px-5 py-3.5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-2 focus:ring-green/25"
                       />
                     </div>
                     <div>
-                      <label htmlFor="o-phone" className="mb-1.5 block font-display text-[15px] font-bold text-cocoa">
+                      <label htmlFor="o-phone" className="mb-1.5 block font-display text-[15px] font-bold text-ink">
                         ফোন নম্বর
                       </label>
                       <input
@@ -560,12 +612,12 @@ export default function Home() {
                         required
                         inputMode="tel"
                         placeholder="০১XXXXXXXXX"
-                        className="w-full rounded-md border border-line bg-white px-4 py-3.5 text-[16px] text-cocoa outline-none transition placeholder:text-cocoa-faint focus:border-gold focus:ring-2 focus:ring-gold/25"
+                        className="w-full rounded-full border border-line bg-white px-5 py-3.5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-2 focus:ring-green/25"
                       />
                     </div>
                   </div>
                   <div>
-                    <label htmlFor="o-address" className="mb-1.5 block font-display text-[15px] font-bold text-cocoa">
+                    <label htmlFor="o-address" className="mb-1.5 block font-display text-[15px] font-bold text-ink">
                       ডেলিভারির ঠিকানা
                     </label>
                     <textarea
@@ -575,92 +627,91 @@ export default function Home() {
                       required
                       rows={3}
                       placeholder="বাসা/হোল্ডিং, রোড, এলাকা, জেলা"
-                      className="w-full resize-none rounded-md border border-line bg-white px-4 py-3.5 text-[16px] text-cocoa outline-none transition placeholder:text-cocoa-faint focus:border-gold focus:ring-2 focus:ring-gold/25"
+                      className="w-full resize-none rounded-2xl border border-line bg-white px-5 py-3.5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-2 focus:ring-green/25"
                     />
                   </div>
-                  <p className="text-[14px] leading-relaxed text-cocoa-soft">
-                    নির্বাচিত পণ্য: <strong className="text-cocoa">{selected.name} · {selected.sizeBn}</strong> —{" "}
+                  <p className="text-[14px] leading-relaxed text-ink-soft">
+                    নির্বাচিত পণ্য: <strong className="text-ink">{selected.name} · {selected.sizeBn}</strong> —{" "}
                     {qty.toLocaleString("bn-BD")} টি
                   </p>
                   <button
                     type="submit"
-                    className={`${fade} mt-1 w-full rounded-md bg-gold py-4 text-[17px] font-bold text-cocoa shadow-[0_16px_28px_-12px_rgb(185_127_31/0.8)] hover:-translate-y-0.5 hover:bg-terra-deep hover:text-white active:scale-[0.98]`}
+                    className={`${fade} mt-1 w-full rounded-full bg-green py-4 text-[17px] font-bold text-white shadow-[0_16px_28px_-12px_rgb(13_156_77/0.7)] hover:-translate-y-0.5 hover:bg-green-deep active:scale-[0.98]`}
                   >
                     {order.submit} — {selected.sizeBn}
                   </button>
                 </form>
               )}
             </div>
-            <div className="relative flex flex-col justify-center overflow-hidden px-7 py-10 sm:px-9">
-              <div className="absolute inset-0">
-                <Image src="/baaric-wood.jpg" alt="" fill className="object-cover opacity-75" />
-                <div className="absolute inset-0 bg-cream/60" />
-              </div>
-              <div className="relative">
-                <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-terra-deep">{order.eyebrow}</p>
-                <h2 className="mt-2 font-display text-[28px] font-bold leading-snug text-cocoa sm:text-[32px]">
-                  {order.heading}
-                </h2>
-                <p className="mt-2 text-[15px] leading-relaxed text-cocoa-soft">{order.subtext}</p>
-                <div className="mt-7 flex items-center gap-4 rounded-lg bg-white/85 p-4 shadow-[0_16px_30px_-20px_rgb(74_46_27/0.5)]">
-                  <div className="h-24 w-20 shrink-0 overflow-hidden rounded-md bg-white">
-                    <Image
-                      key={selected.id}
-                      src={selected.image}
-                      alt={selected.alt}
-                      width={160}
-                      height={200}
-                      className="anim-swap h-full w-full object-contain"
-                    />
-                  </div>
-                  <div>
-                    <p className="font-display text-[18px] font-bold leading-snug text-cocoa">{selected.name}</p>
-                    <p className="mt-1 text-[14px] text-cocoa-soft">
-                      {selected.variant} · {selected.sizeBn} ({selected.sizeMl})
-                    </p>
-                    <div className="mt-2 flex items-center gap-2">
-                      <span className="text-[13px] font-semibold text-cocoa-soft">পরিমাণ</span>
-                      <button
-                        type="button"
-                        onClick={() => setQty((q) => Math.max(1, q - 1))}
-                        aria-label="পরিমাণ কমান"
-                        className="flex h-8 w-8 items-center justify-center rounded-md border border-line bg-white text-[16px] text-cocoa transition hover:border-gold hover:text-terra-deep"
-                      >
-                        −
-                      </button>
-                      <span className="min-w-5 text-center text-[15px] font-bold text-cocoa">
-                        {qty.toLocaleString("bn-BD")}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setQty((q) => Math.min(10, q + 1))}
-                        aria-label="পরিমাণ বাড়ান"
-                        className="flex h-8 w-8 items-center justify-center rounded-md border border-line bg-white text-[16px] text-cocoa transition hover:border-gold hover:text-terra-deep"
-                      >
-                        +
-                      </button>
-                    </div>
+            <div className="flex flex-col justify-center bg-green px-7 py-10 sm:px-9">
+              <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-gold-soft">{order.eyebrow}</p>
+              <h2 className="mt-2 font-display text-[28px] font-bold leading-snug text-white sm:text-[32px]">
+                {order.heading}
+              </h2>
+              <p className="mt-2 text-[15px] leading-relaxed text-white/85">{order.subtext}</p>
+              <div className="mt-7 flex items-center gap-4 rounded-2xl bg-white/95 p-4 shadow-[0_16px_30px_-20px_rgb(0_0_0/0.5)]">
+                <div className="h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-white">
+                  <Image
+                    key={selected.id}
+                    src={selected.image}
+                    alt={selected.alt}
+                    width={160}
+                    height={200}
+                    className="anim-swap h-full w-full object-contain"
+                  />
+                </div>
+                <div>
+                  <p className="font-display text-[18px] font-bold leading-snug text-ink">{selected.name}</p>
+                  <p className="mt-1 text-[14px] text-ink-soft">
+                    {selected.variant} · {selected.sizeBn} ({selected.sizeMl})
+                  </p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="text-[13px] font-semibold text-ink-soft">পরিমাণ</span>
+                    <button
+                      type="button"
+                      onClick={() => setQty((q) => Math.max(1, q - 1))}
+                      aria-label="পরিমাণ কমান"
+                      className="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-white text-[16px] text-ink transition hover:border-green hover:text-green-deep"
+                    >
+                      −
+                    </button>
+                    <span className="min-w-5 text-center text-[15px] font-bold text-ink">
+                      {qty.toLocaleString("bn-BD")}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setQty((q) => Math.min(10, q + 1))}
+                      aria-label="পরিমাণ বাড়ান"
+                      className="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-white text-[16px] text-ink transition hover:border-green hover:text-green-deep"
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
-                <p className="mt-4 rounded-lg bg-rose-soft/60 px-4 py-3 text-[13.5px] leading-relaxed text-cocoa-soft">
-                  {order.note}
-                </p>
               </div>
+              <p className="mt-4 rounded-xl bg-white/15 px-4 py-3 text-[13.5px] leading-relaxed text-white/90">
+                {order.note}
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Footer: deep wood brown, gold rule on top. ── */}
-      <footer className="border-t-4 border-gold bg-wood-dark py-12 text-cream">
+      {/* ── Footer: black, like the reference ── */}
+      <footer className="bg-ink py-12 text-white">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
             <div>
-              <p className="font-display text-[28px] font-bold leading-none">Baaric</p>
-              <p className="mt-2 text-[15px] text-cream/70">{site.tagline}</p>
-              <p className="mt-4 text-[13px] text-cream/50">{site.contactNote}</p>
+              <p className="flex items-center gap-2 font-display text-[28px] font-bold leading-none">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green text-white">
+                  <Leaf className="h-4 w-4" />
+                </span>
+                Baaric
+              </p>
+              <p className="mt-3 text-[15px] text-white/60">{site.tagline}</p>
+              <p className="mt-4 text-[13px] text-white/40">{site.contactNote}</p>
             </div>
-            <nav className="flex flex-col gap-2.5 text-[15px] font-medium text-cream/80">
+            <nav className="flex flex-col gap-2.5 text-[15px] font-medium text-white/70">
               {navLinks.map(([href, label]) => (
                 <a key={href} href={href} className="transition hover:text-gold">
                   {label}
@@ -671,9 +722,9 @@ export default function Home() {
               </a>
             </nav>
           </div>
-          <div className="mt-10 border-t border-cream/15 pt-6 text-[13px] text-cream/50">
+          <div className="mt-10 border-t border-white/10 pt-6 text-[13px] text-white/40">
             © ২০২৬ Baaric · All rights reserved. Developed by{" "}
-            <a href="https://jnx-dev.vercel.app" target="_blank" rel="noreferrer" className="font-semibold text-cream/80 hover:text-gold">
+            <a href="https://jnx-dev.vercel.app" target="_blank" rel="noreferrer" className="font-semibold text-gold hover:text-white">
               JNX
             </a>
           </div>

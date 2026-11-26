@@ -116,6 +116,19 @@ export const variants: Variant[] = [
   },
 ];
 
+// Ingredients — read off the real bottle labels (Round 8).
+export const ingredients = [
+  { name: "ডালিম", en: "Pomegranate", note: "ম্যাসাজ অয়েলে — সুস্থ বৃদ্ধি ও পুষ্টির জন্য।" },
+  { name: "নোনি", en: "Noni", note: "ম্যাসাজ অয়েলে — ডালিমের সঙ্গে, সুস্থ বৃদ্ধি ও পুষ্টির জন্য।" },
+  { name: "গুরহাল", en: "Gurhal", note: "হেয়ার অয়েলে — চুলের বৃদ্ধির জন্য।" },
+  { name: "ভৃঙ্গরাজ", en: "Bhringraj", note: "হেয়ার অয়েলে — মাথার ত্বকের যত্নের জন্য।" },
+] as const;
+
+export const formula = {
+  heading: "প্রাকৃতিক ফর্মুলা",
+  text: "তিনটি আসল তেল — ম্যাসাজ, হেয়ার আর কোকোনাট। লেবেলে যা লেখা, বোতলে তাই।",
+} as const;
+
 // SAMPLE reviews — replace with real customer words.
 export const reviews = {
   eyebrow: "গ্রাহকের প্রতিক্রিয়া",
