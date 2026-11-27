@@ -117,6 +117,10 @@ h1, h2, h3 {
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Every clickable thing shows the pointer (finger) cursor — user
+   round 14. Tailwind v4 leaves buttons with the default arrow. */
+a, button, [role="button"] { cursor: pointer; }
+
 /* Scroll reveal — initial state only; JS sets inline style (never classList),
    so React re-renders (FAQ open etc.) can never wipe the visible state. */
 .reveal {

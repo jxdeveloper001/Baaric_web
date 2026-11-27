@@ -195,15 +195,15 @@ const cutoutDims: Record<string, [number, number]> = {
 
 // One product's image + details (used by both dissolve layers).
 const productContent = (v: (typeof variants)[number]) => (
-  <div className="grid items-center gap-8 md:grid-cols-2 md:gap-14">
+  <div className="grid items-center gap-6 md:grid-cols-2 md:gap-14">
     <div className={`relative ${v.id === "hair-150" ? "md:order-2" : ""}`}>
-      <div aria-hidden className="dots absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-pale/70 sm:h-[380px] sm:w-[380px] md:h-[440px] md:w-[440px]" />
+      <div aria-hidden className="dots absolute left-1/2 top-1/2 h-[280px] w-[280px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-pale/70 sm:h-[340px] sm:w-[340px] md:h-[400px] md:w-[400px]" />
       <Image
         src={v.image}
         alt={v.alt}
         width={cutoutDims[v.id][0]}
         height={cutoutDims[v.id][1]}
-        className="relative mx-auto h-[340px] w-auto object-contain drop-shadow-[0_28px_32px_rgb(0_0_0/0.22)] sm:h-[400px] md:h-[440px]"
+        className="relative mx-auto h-[300px] w-auto object-contain drop-shadow-[0_28px_32px_rgb(0_0_0/0.22)] sm:h-[360px] md:h-[400px]"
       />
       <Leaf className="absolute bottom-8 right-[10%] h-8 w-8 rotate-[20deg] text-green" />
     </div>
@@ -235,7 +235,6 @@ const productContent = (v: (typeof variants)[number]) => (
             <span className="font-display text-[26px] font-extrabold leading-none tracking-tight text-ink">
               Baaric
             </span>
-            <span className="font-display text-[15px] font-bold text-green">বারিক</span>
           </a>
           <nav className="hidden items-center justify-self-center gap-2 text-[15px] font-medium text-ink-soft lg:flex">
             {navLinks.map(([href, label]) => (
@@ -378,7 +377,7 @@ const productContent = (v: (typeof variants)[number]) => (
                container — it never moves or changes when another size
                is picked; only the content above it dissolves + flips.
                The order button sits below the control, centred. ── */}
-          <article className="reveal panel-soft relative mt-12 overflow-hidden p-6 sm:p-8 md:p-12">
+          <article className="reveal panel-soft relative mt-12 overflow-hidden px-6 py-5 sm:px-8 sm:py-7 md:px-12 md:py-9">
             <div className="relative">
               {fadingId && (
                 <div key={fadingId} aria-hidden className="anim-dissolve-out absolute inset-0">
@@ -389,7 +388,7 @@ const productContent = (v: (typeof variants)[number]) => (
                 {productContent(selected)}
               </div>
             </div>
-            <div className="mt-10 flex flex-col items-center">
+            <div className="mt-8 flex flex-col items-center">
               <div className="relative flex w-full max-w-md rounded-full bg-gold/15 p-1.5 shadow-[inset_0_0_0_1px_rgb(249_164_48/0.4)]" role="group" aria-label="সাইজ বেছে নিন">
                 <span
                   aria-hidden
