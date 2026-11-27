@@ -173,10 +173,11 @@ const cutoutDims: Record<string, [number, number]> = {
 
   return (
     <main className="min-h-screen bg-white">
-      {/* ── Header: white, logo left, nav centre — no icons
-           (search / cart / menu removed, user round 11) ── */}
+      {/* ── Header: logo left, nav centre, order button right
+           (search / cart / menu removed, user round 11; order
+           button + centred nav, user round 12) ── */}
       <header className="sticky top-0 z-40 border-b border-line bg-white/95 shadow-[0_10px_30px_-18px_rgb(0_0_0/0.25)] backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5 md:px-8">
+        <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center px-5 py-3.5 md:px-8">
           <a href="#" className="flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green text-white">
               <Leaf className="h-5 w-5" />
@@ -186,13 +187,19 @@ const cutoutDims: Record<string, [number, number]> = {
             </span>
             <span className="font-display text-[15px] font-bold text-green">বারিক</span>
           </a>
-          <nav className="hidden items-center gap-7 text-[15px] font-medium text-ink-soft lg:flex">
+          <nav className="hidden items-center justify-self-center gap-2 text-[15px] font-medium text-ink-soft lg:flex">
             {navLinks.map(([href, label]) => (
-              <a key={href} href={href} className={`${fade} hover:text-green`}>
+              <a key={href} href={href} className={`${fade} rounded-full px-3 py-2 hover:bg-green-pale hover:text-green-deep`}>
                 {label}
               </a>
             ))}
           </nav>
+          <a
+            href="#order"
+            className={`${fade} justify-self-end rounded-full btn-green px-6 py-2.5 text-[14px] font-bold text-white hover:-translate-y-0.5 active:scale-95`}
+          >
+            অর্ডার করুন
+          </a>
         </div>
       </header>
 
@@ -315,44 +322,60 @@ const cutoutDims: Record<string, [number, number]> = {
               তিনটি তেল, তিন রকম যত্ন — বোতলের লেবেলেই সব লেখা।
             </p>
           </div>
-          {variants.map((v, i) => (
-            <article
-              key={v.id}
-              className="reveal panel-soft mt-12 grid items-center gap-8 p-6 sm:p-8 md:grid-cols-2 md:gap-14 md:p-12"
-            >
-              <div className={`relative ${i % 2 === 1 ? "md:order-2" : ""}`}>
+          {/* ── One merged container: the selected product only, with a
+               50m / 150m / 200m selector where the order button was and
+               the order button further down. The layout flips for 150m
+               (image right, details left) — same as its old row — and
+               the content swaps with a fade transition on every change. ── */}
+          <article className="reveal panel-soft relative mt-12 overflow-hidden p-6 sm:p-8 md:p-12">
+            <div key={selected.id} className="anim-swap grid items-center gap-8 md:grid-cols-2 md:gap-14">
+              <div className={`relative ${selected.id === "hair-150" ? "md:order-2" : ""}`}>
                 <div aria-hidden className="dots absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-pale/70 sm:h-[380px] sm:w-[380px] md:h-[440px] md:w-[440px]" />
                 <Image
-                  src={v.image}
-                  alt={v.alt}
-                  width={cutoutDims[v.id][0]}
-                  height={cutoutDims[v.id][1]}
+                  src={selected.image}
+                  alt={selected.alt}
+                  width={cutoutDims[selected.id][0]}
+                  height={cutoutDims[selected.id][1]}
                   className="relative mx-auto h-[340px] w-auto object-contain drop-shadow-[0_28px_32px_rgb(0_0_0/0.22)] sm:h-[400px] md:h-[440px]"
                 />
                 <Leaf className="absolute bottom-8 right-[10%] h-8 w-8 rotate-[20deg] text-green" />
               </div>
-              <div className={i % 2 === 1 ? "md:order-1" : ""}>
-                <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-green">{v.variant}</p>
+              <div className={selected.id === "hair-150" ? "md:order-1" : ""}>
+                <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-green">{selected.variant}</p>
                 <h3 className="mt-2 font-display text-[30px] font-extrabold leading-tight text-ink sm:text-[36px]">
-                  {v.name}
+                  {selected.name}
                 </h3>
-                <p className="mt-2 text-[14px] font-semibold text-ink-faint">{v.labelEn}</p>
+                <p className="mt-2 text-[14px] font-semibold text-ink-faint">{selected.labelEn}</p>
                 <p className="mt-3 max-w-md text-[16px] leading-relaxed text-ink-soft">
-                  {v.desc} {v.use}।
+                  {selected.desc} {selected.use}।
                 </p>
-                <div className="mt-7 flex flex-wrap items-center gap-5">
-                  <button
-                    type="button"
-                    onClick={() => pick(v.id)}
-                    className={`${fade} rounded-full btn-green px-8 py-3 text-[15px] font-bold text-white hover:-translate-y-0.5 active:scale-95`}
-                  >
-                    অর্ডার করুন
-                  </button>
-                  <span className="text-[20px] font-bold text-ink">{v.sizeBn}</span>
+                <div className="mt-7 flex flex-wrap items-center gap-2" role="group" aria-label="সাইজ বেছে নিন">
+                  {variants.map((v) => (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() => setVariantId(v.id)}
+                      aria-pressed={v.id === selected.id}
+                      className={`rounded-full px-5 py-2 text-[14px] font-bold transition-all duration-300 ${
+                        v.id === selected.id
+                          ? "btn-green text-white shadow-[0_10px_20px_-8px_rgb(13_156_77/0.7)]"
+                          : "border border-green/40 bg-white text-green-deep hover:border-green hover:bg-green-pale"
+                      }`}
+                    >
+                      {v.sizeBn}
+                    </button>
+                  ))}
                 </div>
+                <button
+                  type="button"
+                  onClick={() => pick(selected.id)}
+                  className={`${fade} mt-6 rounded-full btn-green px-9 py-3 text-[15px] font-bold text-white hover:-translate-y-0.5 active:scale-95`}
+                >
+                  অর্ডার করুন
+                </button>
               </div>
-            </article>
-          ))}
+            </div>
+          </article>
         </div>
       </section>
 
@@ -422,30 +445,26 @@ const cutoutDims: Record<string, [number, number]> = {
         </div>
       </section>
 
-      {/* ── Packages: white, gold top strip, click to select + order ── */}
             {/* ── Packages: "Our Best Sellers" — same-to-same as the user's
            reference (Nov 27): cream page, big white rounded card,
            green "Order Now." eyebrow, black serif "Our Best Sellers",
            3 columns, stars + 5.0, size in green where the price sits
-           (Baaric has no prices), green pill button, the selected
-           card elevated like the reference's centre card, palm leaf
-           at the bottom-right corner. Content + photos are Baaric's. ── */}
+           (Baaric has no prices), green pill button, cards lift on
+           HOVER (not on select — user round 12), palm leaf at the
+           bottom-right corner. Content + photos are Baaric's. ── */}
       <section id="packages" className="relative scroll-mt-24 overflow-hidden bg-cream py-16 md:py-24">
         <div className="relative mx-auto max-w-6xl px-5 md:px-8">
           <div className="reveal relative rounded-[28px] bg-white px-5 py-12 shadow-[0_30px_60px_-30px_rgb(10_10_10/0.25)] sm:px-10 md:px-14 md:py-14">
             <div className="text-center">
-              <p className="text-[13px] font-semibold text-green">Order Now.</p>
-              <h2 className="mt-2 font-serif text-[34px] font-bold text-ink sm:text-[44px]">Our Best Sellers</h2>
+              <p className="text-[13px] font-semibold text-green">অর্ডার করুন</p>
+              <h2 className="mt-2 font-serif text-[34px] font-bold text-ink sm:text-[44px]">প্যাকেজ</h2>
             </div>
             <div className="mt-10 grid gap-8 md:grid-cols-3 md:gap-6">
               {variants.map((v) => {
-                const active = v.id === selected.id;
                 return (
                   <article
                     key={v.id}
-                    className={`reveal relative rounded-3xl px-4 py-6 text-center transition-all duration-300 ${
-                      active ? "bg-white shadow-[0_24px_44px_-20px_rgb(10_10_10/0.3)] ring-1 ring-black/5 md:-translate-y-2" : ""
-                    }`}
+                    className="reveal relative rounded-3xl px-4 py-6 text-center transition-all duration-300 hover:bg-white hover:shadow-[0_24px_44px_-20px_rgb(10_10_10/0.3)] hover:ring-1 hover:ring-black/5 md:hover:-translate-y-2"
                   >
                     <Image
                       src={v.image}
@@ -585,7 +604,8 @@ const cutoutDims: Record<string, [number, number]> = {
       {/* ── Order: form on the left, green summary panel on the right. ── */}
       <section id="order" className="relative scroll-mt-24 overflow-hidden py-16 md:py-20" style={{ background: "linear-gradient(180deg, #F2FBF5 0%, #FFFFFF 45%, #FEF3DF 100%)" }}>
         <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <div className="reveal grid overflow-hidden rounded-2xl bg-white shadow-[0_40px_80px_-24px_rgb(10_10_10/0.45)] md:grid-cols-[1.2fr_1fr]">
+          <div className="reveal relative grid overflow-hidden rounded-[28px] bg-white shadow-[0_40px_80px_-24px_rgb(10_10_10/0.45)] ring-1 ring-black/5 md:grid-cols-[1.2fr_1fr]">
+            <div aria-hidden className="absolute inset-x-0 top-0 z-10 h-[3px] bg-gradient-to-r from-green via-gold to-green" />
             <div className="px-7 py-9 sm:px-9">
               {done ? (
                 <div className="flex h-full flex-col items-start justify-center py-4 text-left">
@@ -624,8 +644,8 @@ const cutoutDims: Record<string, [number, number]> = {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
-                        placeholder="যেমন: আয়েশা রহমান"
-                        className="w-full rounded-full border border-line bg-white px-5 py-3.5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-2 focus:ring-green/25"
+                        placeholder="নাম"
+                        className="w-full rounded-full border border-line bg-[#FBFBF8] px-5 py-3.5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-4 focus:ring-green/15"
                       />
                     </div>
                     <div>
@@ -639,7 +659,7 @@ const cutoutDims: Record<string, [number, number]> = {
                         required
                         inputMode="tel"
                         placeholder="০১XXXXXXXXX"
-                        className="w-full rounded-full border border-line bg-white px-5 py-3.5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-2 focus:ring-green/25"
+                        className="w-full rounded-full border border-line bg-[#FBFBF8] px-5 py-3.5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-4 focus:ring-green/15"
                       />
                     </div>
                   </div>
@@ -654,7 +674,7 @@ const cutoutDims: Record<string, [number, number]> = {
                       required
                       rows={3}
                       placeholder="বাসা/হোল্ডিং, রোড, এলাকা, জেলা"
-                      className="w-full resize-none rounded-2xl border border-line bg-white px-5 py-3.5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-2 focus:ring-green/25"
+                      className="w-full resize-none rounded-2xl border border-line bg-[#FBFBF8] px-5 py-3.5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-4 focus:ring-green/15"
                     />
                   </div>
                   <p className="text-[14px] leading-relaxed text-ink-soft">
@@ -670,14 +690,15 @@ const cutoutDims: Record<string, [number, number]> = {
                 </form>
               )}
             </div>
-            <div className="flex flex-col justify-center panel-green px-7 py-10 sm:px-9">
+            <div className="relative flex flex-col justify-center panel-green overflow-hidden px-7 py-10 sm:px-9">
+              <Leaf className="pointer-events-none absolute -right-5 -top-5 h-28 w-28 rotate-[30deg] text-white/10" aria-hidden />
               <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-gold-soft">{order.eyebrow}</p>
               <h2 className="mt-2 font-display text-[28px] font-extrabold leading-snug text-white sm:text-[32px]">
                 {order.heading}
               </h2>
               <p className="mt-2 text-[15px] leading-relaxed text-white/85">{order.subtext}</p>
               <div className="mt-7 flex items-center gap-4 rounded-2xl bg-white/95 p-4 shadow-[0_16px_30px_-20px_rgb(0_0_0/0.5)]">
-                <div className="h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-white">
+                <div className="h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-black/10 shadow-md">
                   <Image
                     key={selected.id}
                     src={selected.image}
