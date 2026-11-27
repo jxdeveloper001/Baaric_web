@@ -102,6 +102,21 @@ h1, h2, h3 {
 }
 .anim-swap { animation: fadeSlide 0.45s ease both; }
 
+/* Dissolve (true crossfade) for the products container — the old
+   variant fades out while the new one fades in, at the same time. */
+@keyframes dissolve-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dissolve-out { from { opacity: 1; } to { opacity: 0; } }
+.anim-dissolve-in { animation: dissolve-in 0.55s ease both; }
+.anim-dissolve-out { animation: dissolve-out 0.55s ease both; }
+
+/* Gold sliding pill for the products segmented control — the hero
+   order button's gold, gliding between the three sizes. */
+.seg-pill {
+  background: linear-gradient(180deg, #fdba4e 0%, #f9a430 45%, #f07f0a 100%);
+  box-shadow: 0 10px 20px -8px rgb(249 164 48 / 0.7), inset 0 1px 0 rgb(255 255 255 / 0.55);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* Scroll reveal — initial state only; JS sets inline style (never classList),
    so React re-renders (FAQ open etc.) can never wipe the visible state. */
 .reveal {
@@ -134,15 +149,15 @@ h1, h2, h3 {
 }
 
 .lift {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: translate 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .lift:hover {
-  transform: translateY(-3px);
+  translate: 0 -3px;
   box-shadow: 0 18px 34px -18px rgb(10 10 10 / 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-float, .animate-float-slow, .marquee-track, .hero-in, .hero-in-delay, .hero-in-delay2, .anim-swap {
+  .animate-float, .animate-float-slow, .marquee-track, .hero-in, .hero-in-delay, .hero-in-delay2, .anim-swap, .anim-dissolve-in, .anim-dissolve-out {
     animation: none !important;
   }
   .reveal { opacity: 1; transform: none; transition: none; }
@@ -180,10 +195,10 @@ h1, h2, h3 {
   border: 1px solid rgb(13 156 77 / 0.12);
   border-radius: 28px;
   box-shadow: 0 30px 60px -28px rgb(13 156 77 / 0.35), 0 12px 28px -18px rgb(0 0 0 / 0.18);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: translate 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .panel-soft:hover {
-  transform: translateY(-4px);
+  translate: 0 -4px;
   box-shadow: 0 38px 70px -28px rgb(13 156 77 / 0.45), 0 16px 32px -18px rgb(0 0 0 / 0.22);
 }
 .glass {

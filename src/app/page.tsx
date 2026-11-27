@@ -52,13 +52,30 @@ export default function Home() {
   const [address, setAddress] = useState("");
   const [done, setDone] = useState(false);
   const [orderId, setOrderId] = useState("");
+  // ── Products dissolve: the outgoing variant fades out while the
+  //    incoming one fades in (a true dissolve, not a snap + fade-in).
+  //    The segmented control below never moves — only the content
+  //    above it dissolves and flips.
+  const [fadingId, setFadingId] = useState<string | null>(null);
+  const fadeTimer = useRef<number | null>(null);
+  const pickProduct = (id: string) => {
+    if (id === variantId) return;
+    if (fadeTimer.current) window.clearTimeout(fadeTimer.current);
+    setFadingId(variantId);
+    setVariantId(id);
+    fadeTimer.current = window.setTimeout(() => setFadingId(null), 620);
+  };
 
   const selected = variants.find((v) => v.id === variantId) ?? variants[0];
+  const selIdx = variants.findIndex((v) => v.id === variantId);
 
   const pick = (id: string) => {
     setVariantId(id);
     document.getElementById("order")?.scrollIntoView({ behavior: "smooth" });
   };
+  useEffect(() => () => {
+    if (fadeTimer.current) window.clearTimeout(fadeTimer.current);
+  }, []);
 
   // ── Reviews slider: one row, auto-advances, infinite.
   //    The list is rendered twice; the position snaps back to 0
@@ -133,6 +150,11 @@ export default function Home() {
             const el = e.target as HTMLElement;
             el.style.opacity = "1";
             el.style.transform = "none";
+            // Smooth hover transitions on revealed cards: the .reveal
+            // class only transitions opacity/transform, so Tailwind
+            // hover utilities (translate / bg / shadow / ring) would
+            // snap instantly — the "dhakka" on the packages cards.
+            el.style.transition = "all 0.55s cubic-bezier(0.22,1,0.36,1)";
             io.unobserve(e.target);
           }
         }
@@ -170,6 +192,34 @@ const cutoutDims: Record<string, [number, number]> = {
   "hair-150": [446, 1264],
   "coconut-200": [415, 1291],
 };
+
+// One product's image + details (used by both dissolve layers).
+const productContent = (v: (typeof variants)[number]) => (
+  <div className="grid items-center gap-8 md:grid-cols-2 md:gap-14">
+    <div className={`relative ${v.id === "hair-150" ? "md:order-2" : ""}`}>
+      <div aria-hidden className="dots absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-pale/70 sm:h-[380px] sm:w-[380px] md:h-[440px] md:w-[440px]" />
+      <Image
+        src={v.image}
+        alt={v.alt}
+        width={cutoutDims[v.id][0]}
+        height={cutoutDims[v.id][1]}
+        className="relative mx-auto h-[340px] w-auto object-contain drop-shadow-[0_28px_32px_rgb(0_0_0/0.22)] sm:h-[400px] md:h-[440px]"
+      />
+      <Leaf className="absolute bottom-8 right-[10%] h-8 w-8 rotate-[20deg] text-green" />
+    </div>
+    <div className={v.id === "hair-150" ? "md:order-1" : ""}>
+      <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-green">{v.variant}</p>
+      <h3 className="mt-2 font-display text-[30px] font-extrabold leading-tight text-ink sm:text-[36px]">
+        {v.name}
+      </h3>
+      <p className="mt-2 text-[14px] font-semibold text-ink-faint">{v.labelEn}</p>
+      <p className="mt-3 max-w-md text-[16px] leading-relaxed text-ink-soft">
+        {v.desc} {v.use}।
+      </p>
+    </div>
+  </div>
+);
+
 
   return (
     <main className="min-h-screen bg-white">
@@ -322,58 +372,51 @@ const cutoutDims: Record<string, [number, number]> = {
               তিনটি তেল, তিন রকম যত্ন — বোতলের লেবেলেই সব লেখা।
             </p>
           </div>
-          {/* ── One merged container: the selected product only, with a
-               50m / 150m / 200m selector where the order button was and
-               the order button further down. The layout flips for 150m
-               (image right, details left) — same as its old row — and
-               the content swaps with a fade transition on every change. ── */}
+          {/* ── One merged container: the selected product only. The
+               navigation is ONE gold segmented control (sliding pill,
+               like the user's reference) at the bottom-centre of the
+               container — it never moves or changes when another size
+               is picked; only the content above it dissolves + flips.
+               The order button sits below the control, centred. ── */}
           <article className="reveal panel-soft relative mt-12 overflow-hidden p-6 sm:p-8 md:p-12">
-            <div key={selected.id} className="anim-swap grid items-center gap-8 md:grid-cols-2 md:gap-14">
-              <div className={`relative ${selected.id === "hair-150" ? "md:order-2" : ""}`}>
-                <div aria-hidden className="dots absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-pale/70 sm:h-[380px] sm:w-[380px] md:h-[440px] md:w-[440px]" />
-                <Image
-                  src={selected.image}
-                  alt={selected.alt}
-                  width={cutoutDims[selected.id][0]}
-                  height={cutoutDims[selected.id][1]}
-                  className="relative mx-auto h-[340px] w-auto object-contain drop-shadow-[0_28px_32px_rgb(0_0_0/0.22)] sm:h-[400px] md:h-[440px]"
-                />
-                <Leaf className="absolute bottom-8 right-[10%] h-8 w-8 rotate-[20deg] text-green" />
-              </div>
-              <div className={selected.id === "hair-150" ? "md:order-1" : ""}>
-                <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-green">{selected.variant}</p>
-                <h3 className="mt-2 font-display text-[30px] font-extrabold leading-tight text-ink sm:text-[36px]">
-                  {selected.name}
-                </h3>
-                <p className="mt-2 text-[14px] font-semibold text-ink-faint">{selected.labelEn}</p>
-                <p className="mt-3 max-w-md text-[16px] leading-relaxed text-ink-soft">
-                  {selected.desc} {selected.use}।
-                </p>
-                <div className="mt-7 flex flex-wrap items-center gap-2" role="group" aria-label="সাইজ বেছে নিন">
-                  {variants.map((v) => (
-                    <button
-                      key={v.id}
-                      type="button"
-                      onClick={() => setVariantId(v.id)}
-                      aria-pressed={v.id === selected.id}
-                      className={`rounded-full px-5 py-2 text-[14px] font-bold transition-all duration-300 ${
-                        v.id === selected.id
-                          ? "btn-green text-white shadow-[0_10px_20px_-8px_rgb(13_156_77/0.7)]"
-                          : "border border-green/40 bg-white text-green-deep hover:border-green hover:bg-green-pale"
-                      }`}
-                    >
-                      {v.sizeBn}
-                    </button>
-                  ))}
+            <div className="relative">
+              {fadingId && (
+                <div key={fadingId} aria-hidden className="anim-dissolve-out absolute inset-0">
+                  {productContent(variants.find((v) => v.id === fadingId) ?? variants[0])}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => pick(selected.id)}
-                  className={`${fade} mt-6 rounded-full btn-green px-9 py-3 text-[15px] font-bold text-white hover:-translate-y-0.5 active:scale-95`}
-                >
-                  অর্ডার করুন
-                </button>
+              )}
+              <div key={variantId} className="anim-dissolve-in">
+                {productContent(selected)}
               </div>
+            </div>
+            <div className="mt-10 flex flex-col items-center">
+              <div className="relative flex w-full max-w-md rounded-full bg-gold/15 p-1.5 shadow-[inset_0_0_0_1px_rgb(249_164_48/0.4)]" role="group" aria-label="সাইজ বেছে নিন">
+                <span
+                  aria-hidden
+                  className="seg-pill absolute bottom-1.5 left-1.5 top-1.5 w-[calc((100%-12px)/3)] rounded-full"
+                  style={{ transform: `translateX(${selIdx * 100}%)` }}
+                />
+                {variants.map((v) => (
+                  <button
+                    key={v.id}
+                    type="button"
+                    onClick={() => pickProduct(v.id)}
+                    aria-pressed={v.id === variantId}
+                    className={`relative z-10 flex-1 rounded-full py-2.5 text-[14px] font-bold transition-colors duration-300 ${
+                      v.id === variantId ? "text-ink" : "text-ink-soft hover:text-ink"
+                    }`}
+                  >
+                    {v.sizeBn}
+                  </button>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => pick(selected.id)}
+                className={`${fade} mt-5 rounded-full btn-green px-9 py-3 text-[15px] font-bold text-white hover:-translate-y-0.5 active:scale-95`}
+              >
+                অর্ডার করুন
+              </button>
             </div>
           </article>
         </div>
@@ -464,7 +507,7 @@ const cutoutDims: Record<string, [number, number]> = {
                 return (
                   <article
                     key={v.id}
-                    className="reveal relative rounded-3xl px-4 py-6 text-center transition-all duration-300 hover:bg-white hover:shadow-[0_24px_44px_-20px_rgb(10_10_10/0.3)] hover:ring-1 hover:ring-black/5 md:hover:-translate-y-2"
+                    className="reveal relative rounded-3xl px-4 py-6 text-center transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white hover:shadow-[0_24px_44px_-20px_rgb(10_10_10/0.3)] hover:ring-1 hover:ring-black/5 md:hover:-translate-y-1.5"
                   >
                     <Image
                       src={v.image}
@@ -603,8 +646,11 @@ const cutoutDims: Record<string, [number, number]> = {
 
       {/* ── Order: form on the left, green summary panel on the right. ── */}
       <section id="order" className="relative scroll-mt-24 overflow-hidden py-16 md:py-20" style={{ background: "linear-gradient(180deg, #F2FBF5 0%, #FFFFFF 45%, #FEF3DF 100%)" }}>
-        <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <div className="reveal relative grid overflow-hidden rounded-[28px] bg-white shadow-[0_40px_80px_-24px_rgb(10_10_10/0.45)] ring-1 ring-black/5 md:grid-cols-[1.2fr_1fr]">
+        <Leaf className="pointer-events-none absolute -left-8 top-10 h-40 w-40 -rotate-[25deg] text-green/[0.07]" aria-hidden />
+        <Leaf className="pointer-events-none absolute -bottom-10 -right-6 h-48 w-48 rotate-[35deg] text-gold/[0.09]" aria-hidden />
+        <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 h-[560px] w-[860px] -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ background: "radial-gradient(ellipse at center, rgba(249,164,48,0.14), rgba(255,255,255,0) 65%)" }} />
+        <div className="relative z-10 mx-auto max-w-6xl px-5 md:px-8">
+          <div className="reveal relative grid overflow-hidden rounded-[32px] bg-white shadow-[0_48px_90px_-28px_rgb(13_156_77/0.35),0_20px_40px_-20px_rgb(0_0_0/0.25)] ring-1 ring-gold/30 md:grid-cols-[1.2fr_1fr]">
             <div aria-hidden className="absolute inset-x-0 top-0 z-10 h-[3px] bg-gradient-to-r from-green via-gold to-green" />
             <div className="px-7 py-9 sm:px-9">
               {done ? (
@@ -633,51 +679,77 @@ const cutoutDims: Record<string, [number, number]> = {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={submit} className="flex flex-col gap-4">
+                <>
+                  <div className="mb-6">
+                    <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-green">অর্ডার ফর্ম</p>
+                    <h3 className="mt-2 font-display text-[26px] font-extrabold text-ink">আপনার তথ্য দিন</h3>
+                    <p className="mt-1.5 text-[15px] leading-relaxed text-ink-soft">
+                      নাম, ফোন নম্বর আর ডেলিভারির ঠিকানা দিন।
+                    </p>
+                  </div>
+                  <form onSubmit={submit} className="flex flex-col gap-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
                       <label htmlFor="o-name" className="mb-1.5 block font-display text-[15px] font-bold text-ink">
                         আপনার নাম
                       </label>
-                      <input
-                        id="o-name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                        placeholder="নাম"
-                        className="w-full rounded-full border border-line bg-[#FBFBF8] px-5 py-3.5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-4 focus:ring-green/15"
-                      />
+                      <div className="relative">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-faint" aria-hidden>
+                          <circle cx="12" cy="8" r="4" />
+                          <path d="M4 21c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" />
+                        </svg>
+                        <input
+                          id="o-name"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          required
+                          placeholder="নাম"
+                          className="w-full rounded-full border border-line bg-[#FBFBF8] py-3.5 pl-12 pr-5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-4 focus:ring-green/15"
+                        />
+                      </div>
                     </div>
                     <div>
                       <label htmlFor="o-phone" className="mb-1.5 block font-display text-[15px] font-bold text-ink">
                         ফোন নম্বর
                       </label>
-                      <input
-                        id="o-phone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        required
-                        inputMode="tel"
-                        placeholder="০১XXXXXXXXX"
-                        className="w-full rounded-full border border-line bg-[#FBFBF8] px-5 py-3.5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-4 focus:ring-green/15"
-                      />
+                      <div className="relative">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-faint" aria-hidden>
+                          <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.13.96.36 1.9.7 2.8a2 2 0 0 1-.45 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.45c.9.34 1.84.57 2.8.7A2 2 0 0 1 22 16.9Z" />
+                        </svg>
+                        <input
+                          id="o-phone"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          required
+                          inputMode="tel"
+                          placeholder="০১XXXXXXXXX"
+                          className="w-full rounded-full border border-line bg-[#FBFBF8] py-3.5 pl-12 pr-5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-4 focus:ring-green/15"
+                        />
+                      </div>
                     </div>
                   </div>
                   <div>
                     <label htmlFor="o-address" className="mb-1.5 block font-display text-[15px] font-bold text-ink">
                       ডেলিভারির ঠিকানা
                     </label>
-                    <textarea
-                      id="o-address"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      required
-                      rows={3}
-                      placeholder="বাসা/হোল্ডিং, রোড, এলাকা, জেলা"
-                      className="w-full resize-none rounded-2xl border border-line bg-[#FBFBF8] px-5 py-3.5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-4 focus:ring-green/15"
-                    />
+                    <div className="relative">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="pointer-events-none absolute left-4 top-4 h-5 w-5 text-ink-faint" aria-hidden>
+                        <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" />
+                        <circle cx="12" cy="10" r="3" />
+                      </svg>
+                      <textarea
+                        id="o-address"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        required
+                        rows={3}
+                        placeholder="বাসা/হোল্ডিং, রোড, এলাকা, জেলা"
+                        className="w-full resize-none rounded-2xl border border-line bg-[#FBFBF8] py-3.5 pl-12 pr-5 text-[16px] text-ink outline-none transition placeholder:text-ink-faint focus:border-green focus:ring-4 focus:ring-green/15"
+                      />
+                    </div>
                   </div>
-                  <p className="text-[14px] leading-relaxed text-ink-soft">
+                  <p className="inline-flex flex-wrap items-center gap-2 self-start rounded-full bg-green-pale px-4 py-2 text-[14px] leading-relaxed text-ink-soft">
+                    <Leaf className="h-4 w-4 text-green" />
                     নির্বাচিত পণ্য: <strong className="text-ink">{selected.name} · {selected.sizeBn}</strong> —{" "}
                     {qty.toLocaleString("bn-BD")} টি
                   </p>
@@ -685,13 +757,22 @@ const cutoutDims: Record<string, [number, number]> = {
                     type="submit"
                     className={`${fade} mt-1 w-full rounded-full btn-green py-4 text-[17px] font-bold text-white hover:-translate-y-0.5 active:scale-[0.98]`}
                   >
-                    {order.submit} — {selected.sizeBn}
+                    {order.submit} — {selected.sizeBn} <span aria-hidden>→</span>
                   </button>
-                </form>
+                  <p className="mt-1 flex items-center justify-center gap-1.5 text-center text-[13.5px] text-ink-soft">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-green" aria-hidden>
+                      <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.13.96.36 1.9.7 2.8a2 2 0 0 1-.45 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.45c.9.34 1.84.57 2.8.7A2 2 0 0 1 22 16.9Z" />
+                    </svg>
+                    অর্ডার জমা দিলেই আমরা কল করব।
+                  </p>
+                  </form>
+                </>
               )}
             </div>
             <div className="relative flex flex-col justify-center panel-green overflow-hidden px-7 py-10 sm:px-9">
               <Leaf className="pointer-events-none absolute -right-5 -top-5 h-28 w-28 rotate-[30deg] text-white/10" aria-hidden />
+              <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-56" style={{ background: "radial-gradient(ellipse 80% 100% at 50% 0%, rgba(255,255,255,0.22), rgba(255,255,255,0) 70%)" }} />
+              <div className="relative z-10">
               <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-gold-soft">{order.eyebrow}</p>
               <h2 className="mt-2 font-display text-[28px] font-extrabold leading-snug text-white sm:text-[32px]">
                 {order.heading}
@@ -740,6 +821,24 @@ const cutoutDims: Record<string, [number, number]> = {
               <p className="mt-4 rounded-xl bg-white/15 px-4 py-3 text-[13.5px] leading-relaxed text-white/90">
                 {order.note}
               </p>
+              <div className="mt-5 border-t border-white/15 pt-5">
+                <p className="text-[12px] font-bold uppercase tracking-[0.18em] text-gold-soft">এরপর যা হবে</p>
+                <ol className="mt-3 flex flex-col gap-2.5">
+                  {[
+                    "ফর্মটি পূরণ করুন",
+                    "আমরা কল করে দাম ও ডেলিভারি জানাব",
+                    "কনফার্ম হলেই অর্ডারটি পাঠানো হবে",
+                  ].map((s, i) => (
+                    <li key={s} className="flex items-center gap-3 text-[14.5px] text-white/90">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/20 text-[12px] font-bold text-white">
+                        {(i + 1).toLocaleString("bn-BD")}
+                      </span>
+                      {s}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              </div>
             </div>
           </div>
         </div>
