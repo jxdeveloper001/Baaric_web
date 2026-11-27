@@ -43,32 +43,7 @@ const featureIcons = [
   <path key="star" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />,
 ];
 
-const SearchIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
-    <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-    <path d="M21 21l-4.3-4.3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-  </svg>
-);
-
-const CartIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
-    <path d="M3 3h2l2.4 12.4A2 2 0 0 0 9.4 17h7.9a2 2 0 0 0 2-1.6L21 7H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    <circle cx="10" cy="21" r="1.6" fill="currentColor" />
-    <circle cx="18" cy="21" r="1.6" fill="currentColor" />
-  </svg>
-);
-
-const GridIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
-    <rect x="4" y="4" width="7" height="7" rx="1.5" />
-    <rect x="13" y="4" width="7" height="7" rx="1.5" />
-    <rect x="4" y="13" width="7" height="7" rx="1.5" />
-    <rect x="13" y="13" width="7" height="7" rx="1.5" />
-  </svg>
-);
-
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [variantId, setVariantId] = useState("massage-50");
   const [qty, setQty] = useState(1);
@@ -190,21 +165,16 @@ export default function Home() {
     { title: "তিনটি তেল, একসাথে", text: "ম্যাসাজ, হেয়ার আর কোকোনাট — একসাথে যত্ন।" },
   ];
 
-  const heroCutouts = [
-    { src: "/baaric-cut-massage.png", alt: "বেবি ম্যাসাজ অয়েল — ৫০ মিলি বোতল", w: 522, h: 1007, cls: "h-[170px] sm:h-[210px] md:h-[260px]" },
-    { src: "/baaric-cut-coconut.png", alt: "অর্গানিক কোকোনাট অয়েল — ২০০ মিলি বোতল", w: 689, h: 1288, cls: "h-[230px] sm:h-[280px] md:h-[350px]" },
-    { src: "/baaric-cut-hair.png", alt: "বেবি হেয়ার অয়েল — ১৫০ মিলি বোতল", w: 793, h: 1260, cls: "h-[200px] sm:h-[250px] md:h-[310px]" },
-  ];
 const cutoutDims: Record<string, [number, number]> = {
-  "massage-50": [522, 1007],
-  "hair-150": [793, 1260],
-  "coconut-200": [689, 1288],
+  "massage-50": [397, 1008],
+  "hair-150": [446, 1264],
+  "coconut-200": [415, 1291],
 };
 
   return (
     <main className="min-h-screen bg-white">
-      {/* ── Header: white, logo left, nav centre, icons right
-           (cart with qty badge, search, green circle menu) ── */}
+      {/* ── Header: white, logo left, nav centre — no icons
+           (search / cart / menu removed, user round 11) ── */}
       <header className="sticky top-0 z-40 border-b border-line bg-white/95 shadow-[0_10px_30px_-18px_rgb(0_0_0/0.25)] backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5 md:px-8">
           <a href="#" className="flex items-center gap-2">
@@ -223,63 +193,13 @@ const cutoutDims: Record<string, [number, number]> = {
               </a>
             ))}
           </nav>
-          <div className="flex items-center gap-1.5">
-            <a
-              href="#products"
-              aria-label="পণ্য খুঁজুন"
-              className="flex h-10 w-10 items-center justify-center rounded-full text-ink transition hover:bg-green-pale hover:text-green-deep"
-            >
-              <SearchIcon className="h-5 w-5" />
-            </a>
-            <a
-              href="#order"
-              aria-label="অর্ডার দেখুন"
-              className="relative flex h-10 w-10 items-center justify-center rounded-full text-ink transition hover:bg-green-pale hover:text-green-deep"
-            >
-              <CartIcon className="h-5 w-5" />
-              <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-[11px] font-bold text-ink">
-                {qty.toLocaleString("bn-BD")}
-              </span>
-            </a>
-            <button
-              type="button"
-              aria-label="মেনু"
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((v) => !v)}
-              className="ml-1 flex h-10 w-10 items-center justify-center rounded-full bg-green text-white transition hover:bg-green-deep"
-            >
-              <GridIcon className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-        <div className={`faq-panel ${menuOpen ? "open" : ""} border-t border-line/60 bg-white`}>
-          <div>
-            <nav className="flex flex-col px-5 py-2 text-[16px] font-medium text-ink-soft">
-              {navLinks.map(([href, label]) => (
-                <a
-                  key={href}
-                  href={href}
-                  onClick={() => setMenuOpen(false)}
-                  className="rounded-full px-3 py-3 transition-colors hover:bg-green-pale hover:text-green-deep"
-                >
-                  {label}
-                </a>
-              ))}
-              <a
-                href="#order"
-                onClick={() => setMenuOpen(false)}
-                className="rounded-full px-3 py-3 font-bold text-green-deep transition-colors hover:bg-green-pale"
-              >
-                অর্ডার করুন
-              </a>
-            </nav>
-          </div>
         </div>
       </header>
 
-      {/* ── Hero: white, big heavy headline, gold pill button,
-           real bottle cutouts standing on the green arch, big leaves
-           at the top corners, flower + coconut bowl at the arch base. ── */}
+      {/* ── Hero: photographic bg, big heavy headline (gradient word +
+           gold swoosh), gold pill button, the 3-bottle GROUP cutout
+           standing on the green arch, big leaves at the top corners,
+           flower + lifestyle circles at the arch base. ── */}
       <section className="relative overflow-hidden pt-12 md:pt-16" style={{ backgroundImage: "url(/baaric-bg-hero.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
       <div aria-hidden className="absolute inset-0 bg-white/55" />
         <Leaf className="animate-float absolute -left-3 top-8 z-0 h-14 w-14 -rotate-[30deg] text-green md:h-20 md:w-20" />
@@ -292,9 +212,6 @@ const cutoutDims: Record<string, [number, number]> = {
             {hero.titleA}{" "}
             <span className="relative inline-block whitespace-nowrap"><span className="text-gradient">{hero.highlight}</span><svg className="absolute -bottom-2 left-0 h-3 w-full sm:-bottom-3 sm:h-4" viewBox="0 0 300 12" fill="none" preserveAspectRatio="none" aria-hidden><path d="M3 9 C 60 3, 150 2, 297 7" stroke="#F9A430" strokeWidth="5" strokeLinecap="round" /></svg></span>
           </h1>
-          <p className="hero-in-delay2 mx-auto mt-4 max-w-xl text-[16px] leading-relaxed text-ink-soft md:text-[17px]">
-            {hero.subtext}
-          </p>
           <div className="hero-in-delay2 mt-7">
             <a
               href="#order"
@@ -315,18 +232,15 @@ const cutoutDims: Record<string, [number, number]> = {
           <div className="absolute bottom-[2%] right-[1%] z-20 h-14 w-14 overflow-hidden rounded-full ring-4 ring-white/70 shadow-lg sm:h-24 sm:w-24 md:h-32 md:w-32">
             <Image src="/baaric-bowl.jpg" alt="" width={420} height={420} className="h-full w-full object-cover" />
           </div>
-          <div className="relative z-10 flex items-end justify-center gap-1 sm:gap-3 md:gap-5">
-            {heroCutouts.map((c, i) => (
-              <Image
-                key={c.src}
-                src={c.src}
-                alt={c.alt}
-                width={c.w}
-                height={c.h}
-                priority={i === 1}
-                className={`${c.cls} w-auto drop-shadow-[0_18px_16px_rgb(0_0_0/0.25)]`}
-              />
-            ))}
+          <div className="relative z-10 flex items-end justify-center">
+            <Image
+              src="/baaric-cut-trio.png"
+              alt="Baaric-এর তিনটি তেল — বেবি ম্যাসাজ অয়েল, অর্গানিক কোকোনাট অয়েল ও বেবি হেয়ার অয়েল"
+              width={990}
+              height={1108}
+              priority
+              className="h-[300px] w-auto drop-shadow-[0_18px_16px_rgb(0_0_0/0.25)] sm:h-[360px] md:h-[440px]"
+            />
           </div>
         </div>
       </section>
@@ -349,7 +263,7 @@ const cutoutDims: Record<string, [number, number]> = {
         </div>
       </div>
 
-      {/* ── Green band: 4 features (gold icons) + coconut bowl circle,
+      {/* ── Green band: 4 features (gold icons) + lifestyle circle,
            irregular torn edges ── */}
       <section id="features" className="torn relative scroll-mt-24 overflow-hidden py-24 md:py-28" style={{ backgroundImage: "url(/baaric-bg-green.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
       <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-green/80 via-green/85 to-green-dark/90" />
@@ -379,10 +293,10 @@ const cutoutDims: Record<string, [number, number]> = {
             <div aria-hidden className="absolute -inset-8 rounded-full bg-white/15 blur-3xl" />
             <div className="relative h-[240px] w-[240px] overflow-hidden rounded-full ring-4 ring-white/40 md:h-[280px] md:w-[280px]">
               <Image
-                src="/baaric-bowl.jpg"
-                alt="আধা নারকেল — কোকোনাট অয়েলের আসল উপাদান"
-                width={420}
-                height={420}
+                src="/baaric-hero-product.jpg"
+                alt="Baaric-এর তিনটি তেল — ম্যাসাজ, হেয়ার আর কোকোনাট অয়েল"
+                width={1920}
+                height={1280}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -396,6 +310,7 @@ const cutoutDims: Record<string, [number, number]> = {
           <div className="reveal text-center">
             <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-green">পণ্য</p>
             <h2 className="mt-3 font-display text-[30px] font-extrabold text-ink sm:text-[38px]">আমাদের পণ্য</h2>
+            <span className="mx-auto mt-4 block h-[3px] w-12 rounded-full bg-gold" aria-hidden />
             <p className="mx-auto mt-3 max-w-xl text-[16px] leading-relaxed text-ink-soft">
               তিনটি তেল, তিন রকম যত্ন — বোতলের লেবেলেই সব লেখা।
             </p>
@@ -442,11 +357,13 @@ const cutoutDims: Record<string, [number, number]> = {
       </section>
 
       {/* ── Ingredients: white, left-aligned, gold icons ── */}
-      <section id="ingredients" className="scroll-mt-24 bg-white py-16 md:py-20">
-        <div className="mx-auto max-w-5xl px-5 md:px-8">
+      <section id="ingredients" className="relative scroll-mt-24 overflow-hidden bg-white py-16 md:py-20">
+        <Leaf className="pointer-events-none absolute -right-6 top-8 h-32 w-32 rotate-[25deg] text-green/[0.07] md:h-44 md:w-44" aria-hidden />
+        <div className="relative z-10 mx-auto max-w-5xl px-5 md:px-8">
           <div className="reveal">
             <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-green">উপাদান</p>
             <h2 className="mt-3 font-display text-[30px] font-extrabold text-ink sm:text-[38px]">উপাদান</h2>
+            <span className="mt-4 block h-[3px] w-12 rounded-full bg-gold" aria-hidden />
             <p className="mt-3 max-w-xl text-[16px] leading-relaxed text-ink-soft">
               বোতলের লেবেলে যা লেখা, ভেতরে তাই।
             </p>
@@ -506,53 +423,60 @@ const cutoutDims: Record<string, [number, number]> = {
       </section>
 
       {/* ── Packages: white, gold top strip, click to select + order ── */}
-      <section id="packages" className="scroll-mt-24 bg-white py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <div className="reveal text-center">
-            <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-green">প্যাকেজ</p>
-            <h2 className="mt-3 font-display text-[30px] font-extrabold text-ink sm:text-[38px]">প্যাকেজ</h2>
-            <p className="mx-auto mt-3 max-w-xl text-[16px] leading-relaxed text-ink-soft">
-              তিনটি প্যাক — যেটা দরকার, সেটা বেছে নিন।
-            </p>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {variants.map((v) => {
-              const active = v.id === selected.id;
-              return (
-                <article
-                  key={v.id}
-                  className={`reveal relative rounded-2xl border-2 bg-white p-6 text-center shadow-sm transition-all duration-300 ${
-                    active ? "border-green shadow-[0_24px_44px_-22px_rgb(13_156_77/0.5)]" : "border-line"
-                  }`}
-                >
-                  <div aria-hidden className="-mx-6 -mt-6 h-2 rounded-t-2xl bg-gold" />
-                  {active && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-green px-3.5 py-1 text-[12px] font-bold text-white">
-                      নির্বাচিত
-                    </span>
-                  )}
-                  <Image
-                    src={v.image}
-                    alt={v.alt}
-                    width={cutoutDims[v.id][0]}
-                    height={cutoutDims[v.id][1]}
-                    className="mx-auto h-52 w-auto object-contain drop-shadow-[0_20px_22px_rgb(0_0_0/0.18)]"
-                  />
-                  <h3 className="mt-4 font-display text-[20px] font-extrabold text-ink">{v.name}</h3>
-                  <p className="mt-1 text-[14px] text-ink-faint">
-                    {v.variant} · {v.sizeBn}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => pick(v.id)}
-                    className={`${fade} mt-5 w-full rounded-full btn-gold py-3 text-[15px] font-bold text-ink hover:-translate-y-0.5 active:scale-[0.98]`}
+            {/* ── Packages: "Our Best Sellers" — same-to-same as the user's
+           reference (Nov 27): cream page, big white rounded card,
+           green "Order Now." eyebrow, black serif "Our Best Sellers",
+           3 columns, stars + 5.0, size in green where the price sits
+           (Baaric has no prices), green pill button, the selected
+           card elevated like the reference's centre card, palm leaf
+           at the bottom-right corner. Content + photos are Baaric's. ── */}
+      <section id="packages" className="relative scroll-mt-24 overflow-hidden bg-cream py-16 md:py-24">
+        <div className="relative mx-auto max-w-6xl px-5 md:px-8">
+          <div className="reveal relative rounded-[28px] bg-white px-5 py-12 shadow-[0_30px_60px_-30px_rgb(10_10_10/0.25)] sm:px-10 md:px-14 md:py-14">
+            <div className="text-center">
+              <p className="text-[13px] font-semibold text-green">Order Now.</p>
+              <h2 className="mt-2 font-serif text-[34px] font-bold text-ink sm:text-[44px]">Our Best Sellers</h2>
+            </div>
+            <div className="mt-10 grid gap-8 md:grid-cols-3 md:gap-6">
+              {variants.map((v) => {
+                const active = v.id === selected.id;
+                return (
+                  <article
+                    key={v.id}
+                    className={`reveal relative rounded-3xl px-4 py-6 text-center transition-all duration-300 ${
+                      active ? "bg-white shadow-[0_24px_44px_-20px_rgb(10_10_10/0.3)] ring-1 ring-black/5 md:-translate-y-2" : ""
+                    }`}
                   >
-                    অর্ডার করুন
-                  </button>
-                  <p className="mt-3 text-[12.5px] text-ink-faint">দাম কল করে নিশ্চিত করা হবে</p>
-                </article>
-              );
-            })}
+                    <Image
+                      src={v.image}
+                      alt={v.alt}
+                      width={cutoutDims[v.id][0]}
+                      height={cutoutDims[v.id][1]}
+                      className="mx-auto h-56 w-auto object-contain drop-shadow-[0_20px_22px_rgb(0_0_0/0.18)] md:h-64"
+                    />
+                    <h3 className="mt-5 font-display text-[18px] font-bold text-ink">{v.name}</h3>
+                    <p className="mt-1 text-[13.5px] leading-relaxed text-ink-faint">
+                      {v.labelEn.split("·")[0].trim()}
+                    </p>
+                    <p className="mt-2 text-[15px] tracking-[0.18em] text-gold">
+                      ★★★★★ <span className="ml-1 text-[13px] font-semibold tracking-normal text-ink-soft">5.0</span>
+                    </p>
+                    <p className="mt-1 text-[20px] font-bold text-green">{v.sizeBn}</p>
+                    <button
+                      type="button"
+                      onClick={() => pick(v.id)}
+                      className={`${fade} mt-4 rounded-full btn-green px-8 py-2.5 text-[14px] font-bold text-white hover:-translate-y-0.5 active:scale-95`}
+                    >
+                      অর্ডার করুন
+                    </button>
+                  </article>
+                );
+              })}
+            </div>
+            <div aria-hidden className="pointer-events-none absolute -bottom-3 right-3 z-10 md:-right-1">
+              <Leaf className="h-20 w-20 rotate-[30deg] text-green/60 md:h-28 md:w-28" />
+              <Leaf className="absolute bottom-4 right-12 h-14 w-14 -rotate-[20deg] text-green/40 md:h-20 md:w-20" />
+            </div>
           </div>
         </div>
       </section>
@@ -565,6 +489,7 @@ const cutoutDims: Record<string, [number, number]> = {
             <div>
               <p className="text-[13px] font-bold uppercase tracking-[0.18em] text-gold">{reviews.eyebrow}</p>
               <h2 className="mt-3 font-display text-[30px] font-extrabold text-white sm:text-[38px]">{reviews.heading}</h2>
+              <span className="mt-4 block h-[3px] w-12 rounded-full bg-gold" aria-hidden />
               {reviews.sample && (
                 <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[12px] font-bold text-gold">
                   নমুনা রিভিউ — আসল ক্রেতার কথা এলে এখানে বসবে
@@ -625,6 +550,7 @@ const cutoutDims: Record<string, [number, number]> = {
         <div className="mx-auto max-w-3xl px-5 md:px-8">
           <div className="reveal text-center">
             <h2 className="font-display text-[30px] font-extrabold text-ink sm:text-[38px]">সচরাচর জিজ্ঞাসা</h2>
+            <span className="mx-auto mt-4 block h-[3px] w-12 rounded-full bg-gold" aria-hidden />
           </div>
           <div className="reveal mt-8">
             {faqs.map((f, i) => {

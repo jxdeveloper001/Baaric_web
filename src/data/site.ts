@@ -6,13 +6,13 @@
 // • NO price, delivery charge, COD or delivery-time claim anywhere
 //   on the site — none was supplied. The order form collects an
 //   order request; price + delivery are confirmed on the call.
-// • Photos (Nov 25, 3rd round): hero is the 3-bottle composition the user
-//   re-sent (1720x1280); details image is the white-bg 3-bottle shot
-//   (brand-style, made from the real product). HONEST: the details
-//   image's hair-oil bottle reads "100 ml" in its small print (AI
-//   inconsistency) while the site lists Hair Oil 150 ml; the massage-50
-//   single's small label text is still MIXED (hair-oil words under
-//   "Baby Massage Oil"). The bottles' real "maate" labels are kept.
+// • Photos (Nov 27 re-send, same content as Nov 25/26, PNG): the 3-bottle
+//   group, the 3 singles and the lifestyle shot. HONEST: the new hair
+//   single reads "150 ml" (matches the site) and the massage single reads
+//   "50 ml" (matches); the massage-50 single's small label text is still
+//   MIXED (hair-oil words under "Baby Massage Oil"); the GROUP photo's
+//   hair bottle reads "100 ml" in its small print while the site lists
+//   Hair Oil 150 ml. The bottles' real "maate" labels are kept.
 // • Sizes (user, Nov 25 evening): THREE options only — Massage 50 ml,
 //   Hair 150 ml, Coconut 200 ml. The real Massage 150 ml size was
 //   REMOVED from the selector + order form on the user's instruction;
@@ -38,8 +38,6 @@ export const hero = {
   eyebrow: "প্রাকৃতিক বেবি অয়েল",
   titleA: "শিশুর কোমল যত্ন,",
   highlight: "প্রাকৃতিকভাবে",
-  subtext:
-    "ম্যাসাজ, হেয়ার আর কোকোনাট অয়েল — প্রতিদিনের কোমল যত্নে।",
   primaryCta: "অর্ডার করুন",
   secondaryCta: "পণ্য দেখুন",
   trust: ["আসল প্যাকেজিং", "লেবেলে লেখা উপাদান", "কোমল, প্রতিদিনের ব্যবহার"],

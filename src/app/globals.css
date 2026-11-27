@@ -21,6 +21,8 @@
   --color-ink-faint: #6b6b6b;
   --color-line: #e8e8e6;
   --color-paper: #f7f7f5;
+  --color-cream: #f6f3ec;
+  --font-serif: "Noto Serif Bengali", Georgia, "Times New Roman", serif;
 }
 
 html {
@@ -178,6 +180,11 @@ h1, h2, h3 {
   border: 1px solid rgb(13 156 77 / 0.12);
   border-radius: 28px;
   box-shadow: 0 30px 60px -28px rgb(13 156 77 / 0.35), 0 12px 28px -18px rgb(0 0 0 / 0.18);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.panel-soft:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 38px 70px -28px rgb(13 156 77 / 0.45), 0 16px 32px -18px rgb(0 0 0 / 0.22);
 }
 .glass {
   background: rgb(255 255 255 / 0.1);
